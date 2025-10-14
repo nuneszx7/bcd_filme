@@ -1,7 +1,7 @@
 /*********************************************************************************************** 
 * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao filme
 * Data: 01/10/2025
-* Autor: Marcel
+* Autor: João Pedro Teodoro Nunes Correia
 * Versão: 1.0
 ************************************************************************************************/
 
@@ -26,57 +26,104 @@
 
 */
 
-    //$queryRawUnsafe()     -> permite executar um script SQL de uma variável e que retorna valores do banco (SELECT)
-    //$executeRawUnsafe()   -> permite executar um script SQL de uma variavel e que NÃO retorna dados do banco (INSERT, UPDATE E DELETE)
-    //$queryRaw()           ->Permite executar um script SQL SEM estar em uma variável e que retorna valores do banco (SELECT) e faz tratamentos de segurança contra SQL Injection
-    //$executeRaw()         -> Permite executar um script SQL SEM estar em uma variável e que retorna valores do banco (INSERT, UPDATE E DELETE) e faz tratamentos de segurança contra SQL Injection
+//$queryRawUnsafe()     -> permite executar um script SQL de uma variável e que retorna valores do banco (SELECT)
+//$executeRawUnsafe()   -> permite executar um script SQL de uma variavel e que NÃO retorna dados do banco (INSERT, UPDATE E DELETE)
+//$queryRaw()           ->Permite executar um script SQL SEM estar em uma variável e que retorna valores do banco (SELECT) e faz tratamentos de segurança contra SQL Injection
+//$executeRaw()         -> Permite executar um script SQL SEM estar em uma variável e que retorna valores do banco (INSERT, UPDATE E DELETE) e faz tratamentos de segurança contra SQL Injection
 
 //Import da dependência do Prisma que permite a execução de script SQL no banco de dados
-const {PrismaClient} = require('../../generated/prisma')
+const { PrismaClient } = require('../../generated/prisma')
 //Cria um novo objeto baseado na classe do PrismaClient
 const prisma = new PrismaClient()
 
 //Função para retornar uma lista contendo todos os filmes no banco de dados
-const getSelectAllMovies = async function(){
+const getSelectAllMovies = async function () {
 
-    try {        
-    //Script SQL
-    let sql = `SELECT * FROM tbl_filme order by id desc`
+    try {
+        //Script SQL
+        let sql = `SELECT * FROM tbl_filme order by id desc`
 
-    //Encaminha para o banco de dados o script SQL
-    let result = await prisma.$queryRawUnsafe(sql)
+        //Encaminha para o banco de dados o script SQL
+        let result = await prisma.$queryRawUnsafe(sql)
 
-    if(result.length > 0)
-        return result 
-    else
-        return false
+        if (result.length > 0)
+            return result
+        else
+            return false
 
     } catch (error) {
         // console.log(error)
-        return false  
+        return false
     }
 
 }
 
 //Função para retornar um filme filtrando pelo ID no banco de dados
-const getSelectByIdMovies = async function(id){
+const getSelectByIdMovies = async function (id) {
 
+    try {
 
+        //Script SQL
+        let sql = `select * from tbl_filme where id=${id}`;
+
+        //Encaminha para o BD o Script SQL
+        let result = await prisma.$queryRawUnsafe(sql);
+
+        if (Array.isArray(result))
+            return result;
+        else
+            return false;
+
+    } catch (error) {
+        return false;
+    }
 
 }
 
 //Insere um filme novo no banco de dados
-const setInsertMovies = async function(){
+const setInsertMovies = async function (filme) {
+
+    try {
+        let sql = `insert into tbl_filme (
+	nome,
+    sinopse,
+    data_lancamento,
+    duracao,
+    orcamento,
+    trailer,
+    capa)
+    values('${filme.nome}',
+            '${filme.sinopse}',
+            '${filme.data_lancamento}',
+            '${filme.duracao}',
+            '${filme.orcamento}',
+            '${filme.trailer}',
+            '${filme.capa}')`
+
+
+    //executeRawUnsafe() -> Executa o script SQL que não tem retorno de valores
+    let result = await prisma.$executeRawUnsafe(sql)
+
+    if (result)
+        return true
+    else
+        return false
+
+    } catch (error) {
+        return false
+    }
+
+
 
 }
 
 //Altera um filme no banco de dados
-const setUpdateMovies = async function(id){
+const setUpdateMovies = async function (id) {
 
 }
 
 //Deleta um filme pelo ID no banco de dados
-const setDeleteMovies = async function(id){
+const setDeleteMovies = async function (id) {
 
 }
 
@@ -84,8 +131,8 @@ module.exports = {
 
     getSelectAllMovies,
     getSelectByIdMovies,
-    setInsertMovies,
-    setUpdateMovies,
-    setDeleteMovies
+    setInsertMovies
+    // setUpdateMovies,
+    // setDeleteMovies
 
 }

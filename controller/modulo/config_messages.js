@@ -5,7 +5,11 @@
 * Versão: 1.0
 *************************************************************************************************************************************************/
 /**********************************************************   MENSAGENS PADRONIZADAS   ******************************************************/
-const MESSAGE_HEADER    =   {development: 'João Pedro Teodoro Nunes Correia',
+
+const data_atual = new Date()
+
+
+const DEFAULT_HEADER    =   {development: 'João Pedro Teodoro Nunes Correia',
                             api_description: 'API para manipular dados de Filmes',
                             // A data e hora devem ser geradas no momento da requisição
                             status: Boolean,
@@ -16,30 +20,46 @@ const MESSAGE_HEADER    =   {development: 'João Pedro Teodoro Nunes Correia',
 
 
 
-/**********************************************************   MENSAGENS DE SUCESSO   ******************************************************/
-const MESSAGE_REQUEST_SUCCESS   =   {status: true,
-                                    status_code: 200,
-                                    message: 'Requisição bem sucedida!!'
-                                    }
+/****************************MENSAGENS DE SUCESSO************** */
+const SUCESS_REQUEST = {
+    status: true,
+    status_code: 200,
+    message: 'Requisição bem sucedida',
+    items: {}
 
+}
 
+/************************MENSAGENS DE ERR0******************** */
 
+const ERROR_NOT_FOUND = {
+    status: false,
+    status_code: 404,
+    message: 'Não foram encontrados dados de retorno!',
+}
 
-/**********************************************************   MENSAGENS DE ERRO   ******************************************************/
+const ERROR_INTERNAL_SERVER_MODEL = {
+    status: false,
+    status_code: 500,
+    message: 'Não foi possível processar a requisição devido a um erro interno do servidor! (Model)',
+}
 
+const ERROR_INTERNAL_SERVER_CONTROLLER = {
+    status: false,
+    status_code: 500,
+    message: 'Não foi possível processar a requisição devido a um erro interno do servidor! (Controller)',
+}
 
-
-
-
-
-
-
-
-
-
-
+const ERROR_REQUIRED_FIELDS = {
+    status: false,
+    status_code: 400,
+    message: 'Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados ou estão incorretos!'
+}
 
 module.exports = {
-    MESSAGE_HEADER,
-    MESSAGE_REQUEST_SUCCESS
-}
+    DEFAULT_HEADER,
+    SUCESS_REQUEST,
+    ERROR_NOT_FOUND,
+    ERROR_INTERNAL_SERVER_MODEL,
+    ERROR_INTERNAL_SERVER_CONTROLLER,
+    ERROR_REQUIRED_FIELDS
+}   

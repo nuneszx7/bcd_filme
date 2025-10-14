@@ -28,6 +28,8 @@ app.use((request, response, next)=>{
 //Import das controllers
 const controller_filme = require('./controller/filme/controller_filme.js')
 
+
+
 //EndPoints para a rota de Filme
 app.get('/v1/locadora/filme', cors(), async function (request, response){
     //Chama a função para listar os filmes do banco de dados
@@ -36,6 +38,19 @@ app.get('/v1/locadora/filme', cors(), async function (request, response){
     response.status(filme.status_code)
     response.json(filme)
 
+})
+
+app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
+
+    //Recebe o ID encaminhado via parametro na requisição
+    let idFilme = request.params.id
+
+
+    //Chama a função para listar os filmes do BD
+    let filme = await controller_filme.buscarFilmeId(idFilme)
+
+    response.status(filme.status_code)
+    response.json(filme)
 })
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
