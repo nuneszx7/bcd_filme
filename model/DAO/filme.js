@@ -34,25 +34,25 @@
 //Import da dependência do Prisma que permite a execução de script SQL no banco de dados
 const { PrismaClient } = require('../../generated/prisma')
 //Cria um novo objeto baseado na classe do PrismaClient
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 //Função para retornar uma lista contendo todos os filmes no banco de dados
 const getSelectAllMovies = async function () {
 
     try {
         //Script SQL
-        let sql = `SELECT * FROM tbl_filme order by id desc`
-
-        //Encaminha para o banco de dados o script SQL
-        let result = await prisma.$queryRawUnsafe(sql)
-
+        // Usando o método seguro $queryRaw com template literals
+        let result = await prisma.$queryRaw`SELECT * FROM tbl_filme ORDER BY id DESC`
+ 
+        // O prisma.$queryRaw já retorna um array, então a verificação é mais simples
+ 
         if (result.length > 0)
             return result
         else
             return false
 
     } catch (error) {
-        // console.log(error)
+        console.log(error)
         return false
     }
 
@@ -64,17 +64,17 @@ const getSelectByIdMovies = async function (id) {
     try {
 
         //Script SQL
-        let sql = `select * from tbl_filme where id=${id}`;
+        // Usando o método seguro $queryRaw com template literals e passando o 'id' como parâmetro
+        let result = await prisma.$queryRaw`SELECT * FROM tbl_filme WHERE id = ${id}`;
 
-        //Encaminha para o BD o Script SQL
-        let result = await prisma.$queryRawUnsafe(sql);
-
-        if (Array.isArray(result))
+        // O prisma.$queryRaw já retorna um array, então a verificação é mais simples
+        if (result.length > 0)
             return result;
         else
             return false;
 
     } catch (error) {
+        console.log(error); // Adicionado para depuração
         return false;
     }
 
@@ -84,25 +84,25 @@ const getSelectByIdMovies = async function (id) {
 const setInsertMovies = async function (filme) {
 
     try {
-        let sql = `insert into tbl_filme (
-	nome,
-    sinopse,
-    data_lancamento,
-    duracao,
-    orcamento,
-    trailer,
-    capa)
-    values('${filme.nome}',
-            '${filme.sinopse}',
-            '${filme.data_lancamento}',
-            '${filme.duracao}',
-            '${filme.orcamento}',
-            '${filme.trailer}',
-            '${filme.capa}')`
-
-
-    //executeRawUnsafe() -> Executa o script SQL que não tem retorno de valores
-    let result = await prisma.$executeRawUnsafe(sql)
+        // Usando o método seguro $executeRaw com template literals para evitar SQL Injection
+        let result = await prisma.$executeRaw`
+        INSERT INTO tbl_filme (
+            nome,
+            sinopse,
+            data_lancamento,
+            duracao,
+            orcamento,
+            trailer,
+            capa
+        ) VALUES (
+            ${filme.nome},
+            ${filme.sinopse},
+            ${filme.data_lancamento},
+            ${filme.duracao},
+            ${filme.orcamento},
+            ${filme.trailer},
+            ${filme.capa}
+        )`;
 
     if (result)
         return true
@@ -110,6 +110,7 @@ const setInsertMovies = async function (filme) {
         return false
 
     } catch (error) {
+        console.log(error)
         return false
     }
 
