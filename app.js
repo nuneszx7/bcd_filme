@@ -5,12 +5,12 @@
 * Versão: 1.0
 ************************************************************************************************/
 
-const express           = require('express')
-const cors              = require('cors')
-const bodyParser        = require('body-parser')
+const express = require('express')
+const cors = require('cors')
+const bodyParser = require('body-parser')
 
 //Cria um objeto especialista no formato JSON para receber dados via POST e PUT
-const bodyParserJSON    = bodyParser.json()
+const bodyParserJSON = bodyParser.json()
 
 //Retorna a porta do servidor atual ou colocamos uma porta local
 const PORT = process.env.PORT || 8080
@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 8080
 const app = express()
 
 //Configuração de permissões 
-app.use((request, response, next)=>{
+app.use((request, response, next) => {
     response.header('Access-Control-Allow-Origin', '*') //Servidor de origem da API
     response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS') //Verbos permitidos
     //Carrega as configurações no CORS da API
@@ -32,8 +32,8 @@ const controller_filme = require('./controller/filme/controller_filme.js')
 
 
 
-//EndPoints para a rota de Filme
-app.get('/v1/locadora/filme', cors(), async function (request, response){
+//EndPoint para a rota de Filme
+app.get('/v1/locadora/filme', cors(), async function (request, response) {
     //Chama a função para listar os filmes do banco de dados
     let filme = await controller_filme.listarFilmes()
 
@@ -42,6 +42,7 @@ app.get('/v1/locadora/filme', cors(), async function (request, response){
 
 })
 
+//EndPoint para localizar um filme pelo seu ID
 app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
 
     //Recebe o ID encaminhado via parametro na requisição
@@ -55,6 +56,7 @@ app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
     response.json(filme)
 })
 
+//Endpoint para inserir um novo filme na tabela
 app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, response) {
 
     //Recebe os dados do body (corpo) da requisição (caso vc utilizar o bodyParser, é obrigatório ter no EndPoint)
@@ -66,6 +68,30 @@ app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, 
 
     response.status(filme.status_code)
     response.json(filme)
+
+})
+
+//Endpoint para atualizar um filme na tabela
+app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (request, response) {
+
+    //Recebe o id do filme
+    let idFilme = request.params.id
+
+    //Recebe os dados a serem atualizados
+    let dadosBody = request.body
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //Chama a função para atualizar o filme, e encaminha os dados, o id e o contentType
+    
+    let filme = await controller_filme.atualizarFilme(dadosBody, idFilme, contentType)
+    console.log(filme)
+
+    response.status(filme.status_code)
+    response.json(filme)
+
+
 
 })
 
