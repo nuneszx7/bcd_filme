@@ -154,6 +154,20 @@ const setUpdateMovies = async function (filme) {
 //Deleta um filme pelo ID no banco de dados
 const setDeleteMovies = async function (id) {
 
+    try {
+        // Usando o método seguro $executeRaw para DELETE
+        let result = await prisma.$executeRaw`DELETE FROM tbl_filme WHERE id = ${id}`;
+
+        if (result)
+            return true
+        else
+            return false
+    
+        } catch (error) {
+            console.log(error)
+            return false
+        }
+
 }
 
 module.exports = {
@@ -162,6 +176,6 @@ module.exports = {
     getSelectByIdMovies,
     setInsertMovies,
     setUpdateMovies,
-    // setDeleteMovies
+    setDeleteMovies
 
 }

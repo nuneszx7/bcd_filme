@@ -84,13 +84,27 @@ app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (reques
     let contentType = request.headers['content-type']
 
     //Chama a função para atualizar o filme, e encaminha os dados, o id e o contentType
-    
     let filme = await controller_filme.atualizarFilme(dadosBody, idFilme, contentType)
-    console.log(filme)
+    // console.log(filme)
 
     response.status(filme.status_code)
     response.json(filme)
 
+
+
+})
+
+//EndPoint para deletar um filme na tabela
+app.delete('/v1/locadora/filme/:id', cors(), async function (request, response){
+
+    //receber o id do filme
+    let idFilme = request.params.id
+
+    //Chama a função para deletar o filme
+    let filme = await controller_filme.excluirFilme(idFilme)
+
+    response.status(filme.status_code)
+    response.json(filme)
 
 
 })

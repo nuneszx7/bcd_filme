@@ -23,7 +23,7 @@ const DEFAULT_HEADER    =   {development: 'João Pedro Teodoro Nunes Correia',
 const SUCESS_REQUEST = {status: true, status_code: 200, message: 'Requisição bem sucedida!'}
 const SUCCESS_CREATED_ITEM = {status: true, status_code: 201, message: 'Item criado com sucesso!!'}
 const SUCCESS_UPDATED_ITEM = {status: true, status_code: 200, message: 'Item atualizado com sucesso!!'}
-// const SUCCESS_DELETED_ITEM = {status: true, status_code: 200, message: 'Item deletado com sucesso'}
+const SUCCESS_DELETED_ITEM = {status: true, status_code: 200, message: 'Item deletado com sucesso'}
 
 /************************MENSAGENS DE ERR0******************** */
 
@@ -66,5 +66,6 @@ module.exports = {
     ERROR_REQUIRED_FIELDS,
     SUCCESS_CREATED_ITEM,
     SUCCESS_UPDATED_ITEM,
+    SUCCESS_DELETED_ITEM,
     ERROR_CONTENT_TYPE
 }   

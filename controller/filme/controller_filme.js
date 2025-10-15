@@ -177,14 +177,34 @@ const atualizarFilme = async function (filme, id, contentType) {
         return filmeJSON.ERROR_INTERNAL_SERVER_CONTROLLER //500
     } 
 
-
-
-
 }
 
 //Função para deletar um filme
 const excluirFilme = async function (id) {
 
+    try {
+        // Validação de ID válido
+        let validarID = await buscarFilmeId(id);
+
+        if (validarID.status_code == 200) {
+            // Chama a função do DAO para deletar o filme
+            let resultFilme = await filmeDAO.setDeleteMovies(id);
+
+            if (resultFilme) {
+                // Retorna a mensagem de sucesso
+                return MESSAGES.SUCCESS_DELETED_ITEM; // 200
+            } else {
+                // Retorna erro se o DAO falhar
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; // 500
+            }
+        } else {
+            // Retorna o erro se o ID não for encontrado ou for inválido
+            return validarID;
+        }
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER; // 500
+    }
 
 
 }
