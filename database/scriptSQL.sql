@@ -47,5 +47,37 @@ insert into tbl_filme (
             'https://m.media-amazon.com/images/M/MV5BNDkwNjc2OTEtYWNkNS00Mjc1LWJmMDYtYWVhNDA1MjBiYjU4XkEyXkFqcGc@._V1_.jpg'
 			);
             
-select * from tbl_filme
+select * from tbl_filme;
 
+create table tbl_genero (
+	id int not null auto_increment primary key,
+    nome varchar(45) not null
+);
+
+create table tbl_idioma (
+	id int not null auto_increment primary key,
+    nome varchar(45) not null
+);
+
+create table tbl_personagem (
+	id int not null auto_increment primary key,
+    nome varchar(100) not null,
+    id_filme int not null,
+    constraint FK_Personagem_Filme foreign key (id_filme) references tbl_filme(id)
+);
+
+create table tbl_filme_genero (
+	id int not null auto_increment primary key,
+    id_filme int not null,
+    id_genero int not null,
+    constraint FK_Filme_Genero_Filme foreign key (id_filme) references tbl_filme(id),
+    constraint FK_Filme_Genero_Genero foreign key (id_genero) references tbl_filme(id)
+);
+
+create table tbl_filme_idioma (
+	id int not null auto_increment primary key,
+    id_filme int not null,
+    id_idioma int not null,
+    constraint FK_Filme_Idioma_Filme foreign key (id_filme) references tbl_filme(id),
+    constraint FK_Filme_Idioma_Idioma foreign key (id_idioma) references tbl_idioma(id)
+);
