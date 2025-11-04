@@ -106,7 +106,7 @@ app.delete('/v1/locadora/filme/:id', cors(), async function (request, response){
 
 })
 
-// listar todos os personagens
+// listar todos os personagens (ok)
 app.get('/v1/locadora/personagem', cors(), async function (request, response) {
 
     let personagem = await controller_personagem.listarPersonagens()
@@ -116,7 +116,7 @@ app.get('/v1/locadora/personagem', cors(), async function (request, response) {
 
 })
 
-//Buscar personagem pelo id
+//Buscar personagem pelo id (ok)
 app.get('/v1/locadora/personagem/:id', cors(), async function (request, response) {
 
     //Recebe o ID encaminhado via parametro na requisição
@@ -128,7 +128,7 @@ app.get('/v1/locadora/personagem/:id', cors(), async function (request, response
     response.json(personagem)
 })
 
-//Inserir personagem
+//Inserir personagem (ok)
 app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (request, response) {
 
     let dadosBody = request.body
@@ -140,7 +140,7 @@ app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (requ
 
 })
 
-//Função para atualizar personagem (tambem buscando pelo id dele)
+//Função para atualizar personagem (tambem buscando pelo id dele) (OK)
 app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (request, response) {
 
     //recebe o id do personagem

@@ -97,16 +97,16 @@ const inserirPersonagem = async function (personagem, contentType) {
                 let resultPersonagem = await personagemDAO.setInsertPersonagem(personagem)
 
                 if (resultPersonagem) {
-                    let lastID = await personagemDAO.getSelectLastID();
+                    let lastID = await personagemDAO.getSelectLastID()
                     if (lastID) {
-                        personagem.id = lastID;
-                        personagemJSON.status = MESSAGES.SUCCESS_CREATED_ITEM.status;
-                        personagemJSON.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code;
-                        personagemJSON.message = MESSAGES.SUCCESS_CREATED_ITEM.message;
-                        personagemJSON.items.personagem = personagem;
-                        return personagemJSON;
+                        personagem.id = lastID
+                        personagemJSON.status = MESSAGES.SUCCESS_CREATED_ITEM.status
+                        personagemJSON.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
+                        personagemJSON.message = MESSAGES.SUCCESS_CREATED_ITEM.message
+                        personagemJSON.items.personagem = personagem
+                        return personagemJSON
                     } else {
-                        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL;
+                        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL
                     }
 
                 } else {
@@ -153,7 +153,7 @@ const atualizarPersonagem = async function (personagem, id_personagem, contentTy
                 if (validarID.status_code == 200) {
 
                     //Adiciona o ID do filme no JSON de dados)
-                    personagem.id_personagem = Number(id_personagem)
+                    personagem.id_personagem = Number(id_personagem);
 
                     //Chama a função para inserir um novo
                     let resultPersonagem = await personagemDAO.setUpdatePersonagem(personagem)
@@ -200,7 +200,7 @@ const excluirPersonagem = async function (id_personagem) {
 
             if (resultPersonagem) {
                 //Retorna a mensagem de sucesso
-                return MESSAGES.SUCCES_DELETED_ITEM //200
+                return MESSAGES.SUCCESS_DELETED_ITEM //200
             } else {
                 //Retorna erro se o DAO falhar
                 return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500

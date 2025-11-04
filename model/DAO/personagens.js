@@ -85,13 +85,13 @@ const getSelectLastID = async function (){
 
     try {
         //Script para retornar somente o ultimo ID
-        let sql = `select id from tbl_personagem order by id_personagem desc limit 1`
+        let sql = `select id_personagem from tbl_personagem order by id_personagem desc limit 1`
 
         //Encaminha para o BD o script SQL
         let result = await prisma.$queryRawUnsafe(sql)
 
         if(Array.isArray(result))
-            return Number(result[0].id_personagem)
+            return Number(result[0].id_personagem) // Mantido, pois está correto
         else
             return false
 
@@ -145,7 +145,7 @@ const setUpdatePersonagem = async function (personagem) {
             ator_nome          =   '${personagem.ator_nome}',
             objetivo           =   '${personagem.objetivo}'
 
-            where id = ${personagem.id}`
+            where id_personagem = ${personagem.id_personagem}`
 
         //executeRawUnsafe() ->
         let result = await prisma.$executeRawUnsafe(sql)
@@ -180,9 +180,6 @@ const setDeletePersonagens = async function (id_personagem) {
         }
 
 }
-
-
-
 
 
 module.exports = {
