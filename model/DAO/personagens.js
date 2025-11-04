@@ -42,7 +42,7 @@ const getSelectAllPersonagens = async function () {
     try {
         // Script SQL
         // Usando o método seguro $queryRaw com template literals
-        let result = await prisma.$queryRaw`SELECT * FROM tbl_personagem ORDER BY id DESC`
+        let result = await prisma.$queryRaw`SELECT * FROM tbl_personagem ORDER BY id_personagem DESC`
 
         // O prisma.$queryRaw retorna um array
         if (result.length > 0)
@@ -64,7 +64,7 @@ const getPersonagemById = async function (id_personagem) {
 
         //Script SQL
         // Usando o método seguro $queryRaw com template literals e passando o 'id' como parâmetro
-        let result = await prisma.$queryRaw`SELECT * FROM tbl_personagem WHERE id = ${id_personagem}`
+        let result = await prisma.$queryRaw`SELECT * FROM tbl_personagem WHERE id_personagem = ${id_personagem}`
 
 
         if (result.length > 0)
@@ -77,6 +77,29 @@ const getPersonagemById = async function (id_personagem) {
         return false
     }
 
+
+}
+
+//Função que retorna o ultimo ID gerado no BD
+const getSelectLastID = async function (){
+
+    try {
+        //Script para retornar somente o ultimo ID
+        let sql = `select id from tbl_personagem order by id_personagem desc limit 1`
+
+        //Encaminha para o BD o script SQL
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if(Array.isArray(result))
+            return Number(result[0].id_personagem)
+        else
+            return false
+
+
+    } catch (error) {
+        console.log(error) 
+        return false
+    }
 
 }
 
@@ -144,7 +167,7 @@ const setDeletePersonagens = async function (id_personagem) {
 
     try {
         // Usando o método seguro $executeRaw para DELETE
-        let result = await prisma.$executeRaw`DELETE FROM tbl_personagem WHERE id = ${id}`;
+        let result = await prisma.$executeRaw`DELETE FROM tbl_personagem WHERE id_personagem = ${id_personagem}`;
 
         if (result)
             return true
@@ -166,6 +189,7 @@ module.exports = {
 
     getSelectAllPersonagens,
     getPersonagemById,
+    getSelectLastID,
     setInsertPersonagem,
     setUpdatePersonagem,
     setDeletePersonagens

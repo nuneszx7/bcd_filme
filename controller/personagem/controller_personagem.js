@@ -6,7 +6,7 @@
 ************************************************************************************************/
 
 //Import da model do DAO de personagem
-const personagemDAO = require('../model/DAO/personagem.js')
+const personagemDAO = require('../../model/DAO/personagens.js') 
 
 //Import do arquivo de mensagens
 const MESSAGES = require('../modulo/config_messages.js')
@@ -15,7 +15,7 @@ const MESSAGES = require('../modulo/config_messages.js')
 const listarPersonagens = async function () {
 
     // Chama a função do DAO para retornar a lista de personagens do Banco de Dados
-    let resultPersonagens = await personagemDAO.getSelectAllCharacters()
+    let resultPersonagens = await personagemDAO.getSelectAllPersonagens()
     // Criando um objeto novo para as mensagens
     let personagemJSON = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
 
@@ -47,8 +47,8 @@ const buscarPersonagemId = async function (id_personagem) {
         //se for ao contrario do falso, entra e continua o fluxo
 
         //Validação da chegada do ID
-        if (!isNaN(id_personagem) && id != '' && id_personagem != null && id_personagem > 0) {
-            let resultPersonagem = await personagemDAO.getSelectByIdCharacters(Number(id))
+        if (!isNaN(id_personagem) && id_personagem != '' && id_personagem != null && id_personagem > 0) {
+            let resultPersonagem = await personagemDAO.getPersonagemById(Number(id_personagem))
 
             if (resultPersonagem) {
                 if (resultPersonagem.length > 0) {
@@ -68,8 +68,9 @@ const buscarPersonagemId = async function (id_personagem) {
             MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [ID Inválido]'
             return MESSAGES.ERROR_REQUIRED_FIELDS //400
         }
-
+    
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
@@ -93,14 +94,21 @@ const inserirPersonagem = async function (personagem, contentType) {
 
                 //Processamento
                 //Chama a função para inserir um novo personagem no Banco de dados
-                let resultPersonagem = await personagemDAO.setInsertCharacters(personagem)
+                let resultPersonagem = await personagemDAO.setInsertPersonagem(personagem)
 
                 if (resultPersonagem) {
-                    personagemJSON.status = MESSAGES.SUCCESS_CREATED_ITEM.status
-                    personagemJSON.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
-                    personagemJSON.message = MESSAGES.SUCCESS_CREATED_ITEM.message
+                    let lastID = await personagemDAO.getSelectLastID();
+                    if (lastID) {
+                        personagem.id = lastID;
+                        personagemJSON.status = MESSAGES.SUCCESS_CREATED_ITEM.status;
+                        personagemJSON.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code;
+                        personagemJSON.message = MESSAGES.SUCCESS_CREATED_ITEM.message;
+                        personagemJSON.items.personagem = personagem;
+                        return personagemJSON;
+                    } else {
+                        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL;
+                    }
 
-                    return personagemJSON //201
                 } else {
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
@@ -115,6 +123,7 @@ const inserirPersonagem = async function (personagem, contentType) {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
@@ -147,7 +156,7 @@ const atualizarPersonagem = async function (personagem, id_personagem, contentTy
                     personagem.id_personagem = Number(id_personagem)
 
                     //Chama a função para inserir um novo
-                    let resultPersonagem = await personagemDAO.setUpdateCharacters(personagem)
+                    let resultPersonagem = await personagemDAO.setUpdatePersonagem(personagem)
 
                     if (resultPersonagem) {
                         personagemJSON.DEFAULT_HEADER.status = personagemJSON.SUCCESS_UPDATED_ITEM.status
@@ -207,13 +216,21 @@ const excluirPersonagem = async function (id_personagem) {
 
 }
 
+const validarDadosPersonagem = async function (personagem) {
 
+    //Criando um objeto novo para as mensagens
+    let personagemJSON = JSON.parse(JSON.stringify(MESSAGES.ERROR_REQUIRED_FIELDS))
 
+    //Validação do tipo de conteúdo da requisição obrigatório ser em JSON, em maiusculo como string
+    if (personagem.nome_personagem == '' || personagem.nome_personagem == undefined || personagem.nome_personagem == null || personagem.nome_personagem.length > 100) {
 
+        personagemJSON.message += ' [Nome incorreto]'
+        return personagemJSON //400
 
-
-
-
+    } else {
+        return false
+    }
+}
 
 
 
@@ -225,6 +242,6 @@ module.exports = {
     inserirPersonagem,
     atualizarPersonagem,
     excluirPersonagem,
-    // validarDadosPersonagem
+    validarDadosPersonagem
 
 }

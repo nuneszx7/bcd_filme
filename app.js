@@ -29,7 +29,7 @@ app.use((request, response, next) => {
 
 //Import das controllers
 const controller_filme = require('./controller/filme/controller_filme.js')
-
+const controller_personagem = require('./controller/personagem/controller_personagem.js');
 
 
 //EndPoint para a rota de Filme
@@ -90,8 +90,6 @@ app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (reques
     response.status(filme.status_code)
     response.json(filme)
 
-
-
 })
 
 //EndPoint para deletar um filme na tabela
@@ -106,7 +104,70 @@ app.delete('/v1/locadora/filme/:id', cors(), async function (request, response){
     response.status(filme.status_code)
     response.json(filme)
 
+})
+
+// listar todos os personagens
+app.get('/v1/locadora/personagem', cors(), async function (request, response) {
+
+    let personagem = await controller_personagem.listarPersonagens()
+
+    response.status(personagem.status_code)
+    response.json(personagem)
 
 })
+
+//Buscar personagem pelo id
+app.get('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+
+    //Recebe o ID encaminhado via parametro na requisição
+    let idPersonagem = request.params.id
+    //Chama a função para listar os personagens do BD
+    let personagem = await controller_personagem.buscarPersonagemId(idPersonagem)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+//Inserir personagem
+app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (request, response) {
+
+    let dadosBody = request.body
+    let contentType = request.headers['content-type']
+    let personagem = await controller_personagem.inserirPersonagem(dadosBody, contentType)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+
+})
+
+//Função para atualizar personagem (tambem buscando pelo id dele)
+app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (request, response) {
+
+    //recebe o id do personagem
+    let idPersonagem = request.params.id
+    //Recebe os dados a serem atualizados
+    let dadosBody = request.body
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+    //chama a funçao que atualiza o personagem
+    let personagem = await controller_personagem.atualizarPersonagem(dadosBody, idPersonagem, contentType)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+//Função para deletar personagem
+app.delete('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+
+    //Receber o id do personagem
+    let idPersonagem = request.params.id
+    //chama a função que deleta o personagem
+    let personagem = await controller_personagem.excluirPersonagem(idPersonagem)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
+})
+
+
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
