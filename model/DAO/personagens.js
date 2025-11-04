@@ -139,6 +139,25 @@ const setUpdatePersonagem = async function (personagem) {
 
 }
 
+//Função para deletar o personagem
+const setDeletePersonagens = async function (id_personagem) {
+
+    try {
+        // Usando o método seguro $executeRaw para DELETE
+        let result = await prisma.$executeRaw`DELETE FROM tbl_personagem WHERE id = ${id}`;
+
+        if (result)
+            return true
+        else
+            return false
+    
+        } catch (error) {
+            console.log(error)
+            return false
+        }
+
+}
+
 
 
 
@@ -148,6 +167,7 @@ module.exports = {
     getSelectAllPersonagens,
     getPersonagemById,
     setInsertPersonagem,
-    setUpdatePersonagem
+    setUpdatePersonagem,
+    setDeletePersonagens
 
 }
