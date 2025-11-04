@@ -27,7 +27,7 @@ const listarFilmes = async function () {
 
             return filmesJSON
         } else {
-            return MESSAGES.ERROR_NOT_FOUND; // 404
+            return MESSAGES.ERROR_NOT_FOUND // 404
         }
     } else {
         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
