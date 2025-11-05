@@ -33,7 +33,7 @@ const listarFilmesGeneros = async function () {
     }
 }
 
-//Função para buscar um genero pesquisando pelo seu ID
+//Função para buscar um filme pesquisando pelo seu ID
 const buscarFilmeGeneroId = async function (id) {
 
     try {
@@ -51,7 +51,85 @@ const buscarFilmeGeneroId = async function (id) {
                 if (resultGenero.length > 0) {
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
-                    MMESSAGES.DEFAULT_HEADER.items.filme_genero = resultFilmesGeneros
+                    MESSAGES.DEFAULT_HEADER.items.filme_genero = resultFilmesGeneros
+
+                    return MESSAGES; //200
+                } else {
+                    return MESSAGES.ERROR_NOT_FOUND //404
+                }
+            } else {
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+
+        } else {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [ID Inválido]'
+            return MESSAGES.ERROR_REQUIRED_FIELDS //400
+        }
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+
+}
+
+//Função para buscar um genero pesquisando pelo seu ID
+const listarGenerosIdFilme = async function (idFilme) {
+
+    try {
+
+        //Criando um objeto novo para as mensagens
+        let MESSAGES = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+
+        //se for ao contrario do falso, entra e continua o fluxo
+
+        //Validação da chegada do ID
+        if (!isNaN(idFilme) && idFilme != '' && idFilme != null && idFilme > 0) {
+            let resultFilmesGeneros = await generoDAO.getSelectGenerosByIdFilmes(Number(idFilme))
+
+            if (resultFilmesGeneros) {
+                if (resultGenero.length > 0) {
+                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
+                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
+                    MESSAGES.DEFAULT_HEADER.items.filme_genero = resultFilmesGeneros
+
+                    return MESSAGES; //200
+                } else {
+                    return MESSAGES.ERROR_NOT_FOUND //404
+                }
+            } else {
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+
+        } else {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [ID Inválido]'
+            return MESSAGES.ERROR_REQUIRED_FIELDS //400
+        }
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+
+}
+
+//função para buscar um genero pesquisando pelo seu ID
+const listarFilmeIdGenero = async function (idGenero) {
+
+    try {
+
+        //Criando um objeto novo para as mensagens
+        let MESSAGES = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+
+        //se for ao contrario do falso, entra e continua o fluxo
+
+        //Validação da chegada do ID
+        if (!isNaN(idGenero) && idGenero != '' && idGenero != null && idGenero > 0) {
+            let resultFilmesGeneros = await generoDAO.getSelectFilmesByIdGeneros(Number(idGenero))
+
+            if (resultFilmesGeneros) {
+                if (resultGenero.length > 0) {
+                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
+                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
+                    MESSAGES.DEFAULT_HEADER.items.filme_genero = resultFilmesGeneros
 
                     return MESSAGES; //200
                 } else {
@@ -233,7 +311,7 @@ const validarDadosFilmeGenero = async function (filmeGenero) {
 
         MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [id_genero incorreto]'
         return MESSAGES.ERROR_REQUIRED_FIELDS //400
-        
+
     } else {
         return false
     }
@@ -245,6 +323,8 @@ module.exports = {
 
     listarFilmesGeneros,
     buscarFilmeGeneroId,
+    listarGenerosIdFilme,
+    listarFilmeIdGenero,
     inserirFilmeGenero,
     atualizarFilmeGenero,
     excluirFilmeGenero,
