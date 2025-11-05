@@ -30,9 +30,11 @@ app.use((request, response, next) => {
 //Import das controllers
 const controller_filme = require('./controller/filme/controller_filme.js')
 const controller_personagem = require('./controller/personagem/controller_personagem.js');
+const controller_genero = require('./controller/genero/controller_genero.js');
 
 
-//EndPoint para a rota de Filme
+//EndPoints para a rota de Filme
+// retorna todos os filmes do banco de dados
 app.get('/v1/locadora/filme', cors(), async function (request, response) {
     //Chama a função para listar os filmes do banco de dados
     let filme = await controller_filme.listarFilmes()
@@ -42,7 +44,7 @@ app.get('/v1/locadora/filme', cors(), async function (request, response) {
 
 })
 
-//EndPoint para localizar um filme pelo seu ID
+// retorna um filme filtrando pelo seu ID
 app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
 
     //Recebe o ID encaminhado via parametro na requisição
@@ -56,7 +58,7 @@ app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
     response.json(filme)
 })
 
-//Endpoint para inserir um novo filme na tabela
+// insere um novo filme no banco de dados
 app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, response) {
 
     //Recebe os dados do body (corpo) da requisição (caso vc utilizar o bodyParser, é obrigatório ter no EndPoint)
@@ -71,7 +73,7 @@ app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, 
 
 })
 
-//Endpoint para atualizar um filme na tabela
+// atualiza um filme existente no banco de dados
 app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (request, response) {
 
     //Recebe o id do filme
@@ -92,7 +94,7 @@ app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (reques
 
 })
 
-//EndPoint para deletar um filme na tabela
+// deleta um filme existente no banco de dados
 app.delete('/v1/locadora/filme/:id', cors(), async function (request, response){
 
     //receber o id do filme
@@ -106,7 +108,9 @@ app.delete('/v1/locadora/filme/:id', cors(), async function (request, response){
 
 })
 
-// listar todos os personagens (ok)
+//EndPoints para a rota de Personagem
+
+// retorna todos os personagens do banco de dados
 app.get('/v1/locadora/personagem', cors(), async function (request, response) {
 
     let personagem = await controller_personagem.listarPersonagens()
@@ -116,7 +120,7 @@ app.get('/v1/locadora/personagem', cors(), async function (request, response) {
 
 })
 
-//Buscar personagem pelo id (ok)
+// retorna um personagem filtrando pelo seu ID
 app.get('/v1/locadora/personagem/:id', cors(), async function (request, response) {
 
     //Recebe o ID encaminhado via parametro na requisição
@@ -128,7 +132,7 @@ app.get('/v1/locadora/personagem/:id', cors(), async function (request, response
     response.json(personagem)
 })
 
-//Inserir personagem (ok)
+// insere um novo personagem no banco de dados
 app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (request, response) {
 
     let dadosBody = request.body
@@ -140,7 +144,7 @@ app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (requ
 
 })
 
-//Função para atualizar personagem (tambem buscando pelo id dele) (OK)
+// atualiza um personagem existente no banco de dados
 app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (request, response) {
 
     //recebe o id do personagem
@@ -156,7 +160,7 @@ app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (r
     response.json(personagem)
 })
 
-//Função para deletar personagem
+// deleta um personagem existente no banco de dados
 app.delete('/v1/locadora/personagem/:id', cors(), async function (request, response) {
 
     //Receber o id do personagem
@@ -166,6 +170,72 @@ app.delete('/v1/locadora/personagem/:id', cors(), async function (request, respo
 
     response.status(personagem.status_code)
     response.json(personagem)
+})
+
+
+
+// retorna todos os generos do banco de dados
+app.get('/v1/locadora/genero', cors(), async function (request, response) {
+    //Chama a função para listar os generos do banco de dados
+    let genero = await controller_genero.listarGeneros()
+
+    response.status(genero.status_code)
+    response.json(genero)
+
+})
+
+// retorna um genero filtrando pelo seu ID
+app.get('/v1/locadora/genero/:id', cors(), async function (request, response) {
+
+    //Recebe o ID encaminhado via parametro na requisição
+    let idGenero = request.params.id
+
+    //Chama a função para buscar o genero pelo ID
+    let genero = await controller_genero.buscarGeneroId(idGenero)
+
+    response.status(genero.status_code)
+    response.json(genero)
+})
+
+// insere um novo genero no banco de dados
+app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function (request, response) {
+
+    //Recebe os dados do body (corpo) da requisição
+    let dadosBody = request.body
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //Chama a função para inserir um novo genero
+    let genero = await controller_genero.inserirGenero(dadosBody, contentType)
+
+    response.status(genero.status_code)
+    response.json(genero)
+
+})
+
+// Atualiza um genero existente no banco de dados
+app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function (request, response) {
+
+    //Recebe o id do genero
+    let idGenero = request.params.id
+    //Recebe os dados a serem atualizados
+    let dadosBody = request.body
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+    //chama a funçao que atualiza o genero
+    let genero = await controller_genero.atualizarGenero(dadosBody, idGenero, contentType)
+
+    response.status(genero.status_code)
+    response.json(genero)
+})
+
+//Deleta um genero existente no banco de dados
+app.delete('/v1/locadora/genero/:id', cors(), async function (request, response) {
+    let idGenero = request.params.id
+    let genero = await controller_genero.excluirGenero(idGenero)
+    response.status(genero.status_code)
+    response.json(genero)
 })
 
 
