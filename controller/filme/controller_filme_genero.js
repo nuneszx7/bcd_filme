@@ -14,19 +14,19 @@ const MESSAGES = require('../modulo/config_messages.js')
 //Função que retorna uma lista de todos os generos
 const listarFilmesGeneros = async function () {
     //Chama a função do DAO para retornar a lista de generos do Banco de Dados
-    let resultFilmesGeneros = await filmeGeneroDAO.getSelectAllFilmesGeneros()
+    let resultFilmesGeneros = await filmeGeneroDAO.getSelectAllFilmesGeneros();
     // Criando um objeto novo para as mensagens
-    let MESSAGES = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+    let MESSAGES_RESULT = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER));
 
     if (resultFilmesGeneros) {
-        if (resultGenero.length > 0) {
-            MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
-            MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
-            MESSAGES.DEFAULT_HEADER.items.filmes_generos = resultFilmesGeneros
+        if (resultFilmesGeneros.length > 0) {
+            MESSAGES_RESULT.status = MESSAGES.SUCESS_REQUEST.status;
+            MESSAGES_RESULT.status_code = MESSAGES.SUCESS_REQUEST.status_code;
+            MESSAGES_RESULT.items.filmes_generos = resultFilmesGeneros;
 
-            return MESSAGES.DEFAULT_HEADER //200
+            return MESSAGES_RESULT; //200
         } else {
-            return MESSAGES.ERROR_NOT_FOUND // 404
+            return MESSAGES.ERROR_NOT_FOUND; // 404
         }
     } else {
         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
@@ -39,26 +39,26 @@ const buscarFilmeGeneroId = async function (id) {
     try {
 
         //Criando um objeto novo para as mensagens
-        let MESSAGES = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+        let responseJSON = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER));
 
         //se for ao contrario do falso, entra e continua o fluxo
 
         //Validação da chegada do ID
         if (!isNaN(id) && id != '' && id != null && id > 0) {
-            let resultFilmesGeneros = await generoDAO.getSelectByIdFilmeGenero(Number(id))
+            let resultFilmesGeneros = await filmeGeneroDAO.getSelectByIdFilmeGenero(Number(id));
 
             if (resultFilmesGeneros) {
-                if (resultGenero.length > 0) {
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.items.filme_genero = resultFilmesGeneros
+                if (resultFilmesGeneros.length > 0) {
+                    responseJSON.status = MESSAGES.SUCESS_REQUEST.status;
+                    responseJSON.status_code = MESSAGES.SUCESS_REQUEST.status_code;
+                    responseJSON.items.filme_genero = resultFilmesGeneros;
 
-                    return MESSAGES; //200
+                    return responseJSON; //200
                 } else {
-                    return MESSAGES.ERROR_NOT_FOUND //404
+                    return MESSAGES.ERROR_NOT_FOUND; //404
                 }
             } else {
-                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; //500
             }
 
         } else {
@@ -78,26 +78,26 @@ const listarGenerosIdFilme = async function (idFilme) {
     try {
 
         //Criando um objeto novo para as mensagens
-        let MESSAGES = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+        let responseJSON = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER));
 
         //se for ao contrario do falso, entra e continua o fluxo
 
         //Validação da chegada do ID
         if (!isNaN(idFilme) && idFilme != '' && idFilme != null && idFilme > 0) {
-            let resultFilmesGeneros = await generoDAO.getSelectGenerosByIdFilmes(Number(idFilme))
+            let resultFilmesGeneros = await filmeGeneroDAO.getSelectGenerosByIdFilmes(Number(idFilme));
 
             if (resultFilmesGeneros) {
-                if (resultGenero.length > 0) {
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.items.filme_genero = resultFilmesGeneros
+                if (resultFilmesGeneros.length > 0) {
+                    responseJSON.status = MESSAGES.SUCESS_REQUEST.status;
+                    responseJSON.status_code = MESSAGES.SUCESS_REQUEST.status_code;
+                    responseJSON.items.filme_genero = resultFilmesGeneros;
 
-                    return MESSAGES; //200
+                    return responseJSON; //200
                 } else {
-                    return MESSAGES.ERROR_NOT_FOUND //404
+                    return MESSAGES.ERROR_NOT_FOUND; //404
                 }
             } else {
-                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; //500
             }
 
         } else {
@@ -117,26 +117,26 @@ const listarFilmeIdGenero = async function (idGenero) {
     try {
 
         //Criando um objeto novo para as mensagens
-        let MESSAGES = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+        let responseJSON = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER));
 
         //se for ao contrario do falso, entra e continua o fluxo
 
         //Validação da chegada do ID
         if (!isNaN(idGenero) && idGenero != '' && idGenero != null && idGenero > 0) {
-            let resultFilmesGeneros = await generoDAO.getSelectFilmesByIdGeneros(Number(idGenero))
+            let resultFilmesGeneros = await filmeGeneroDAO.getSelectFilmesByIdGeneros(Number(idGenero));
 
             if (resultFilmesGeneros) {
-                if (resultGenero.length > 0) {
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.items.filme_genero = resultFilmesGeneros
+                if (resultFilmesGeneros.length > 0) {
+                    responseJSON.status = MESSAGES.SUCESS_REQUEST.status;
+                    responseJSON.status_code = MESSAGES.SUCESS_REQUEST.status_code;
+                    responseJSON.items.filme_genero = resultFilmesGeneros;
 
-                    return MESSAGES; //200
+                    return responseJSON; //200
                 } else {
-                    return MESSAGES.ERROR_NOT_FOUND //404
+                    return MESSAGES.ERROR_NOT_FOUND; //404
                 }
             } else {
-                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; //500
             }
 
         } else {
@@ -154,7 +154,7 @@ const listarFilmeIdGenero = async function (idGenero) {
 const inserirFilmeGenero = async function (filmeGenero, contentType) {
 
     //Criando um objeto novo para as mensagens
-    let MESSAGES = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+    let MESSAGES_RESULT = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER));
 
     try {
 
@@ -176,14 +176,14 @@ const inserirFilmeGenero = async function (filmeGenero, contentType) {
 
                     if(lastID){
 
-                        filmeGenero.id = lastID
+                        filmeGenero.id = lastID;
 
-                        MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
-                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
-                        MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.filme_genero.id = lastID
-    
-                        return MESSAGES //201
+                        MESSAGES_RESULT.status = MESSAGES.SUCCESS_CREATED_ITEM.status;
+                        MESSAGES_RESULT.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code;
+                        MESSAGES_RESULT.message = MESSAGES.SUCCESS_CREATED_ITEM.message;
+                        MESSAGES_RESULT.items.filme_genero = { id: lastID }; // Assuming you want to return the ID
+
+                        return MESSAGES_RESULT; //201
                     }
                     else {
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
@@ -208,7 +208,7 @@ const inserirFilmeGenero = async function (filmeGenero, contentType) {
 const atualizarFilmeGenero = async function (filmeGenero, id, contentType) {
 
     //Criando um objeto novo para as mensagens
-    let MESSAGES = JSON.parse(JSON.stringify(MESSAGES))
+    let responseJSON = JSON.parse(JSON.stringify(MESSAGES));
 
     try {
 
@@ -233,16 +233,16 @@ const atualizarFilmeGenero = async function (filmeGenero, id, contentType) {
                     filmeGenero.id = Number(id)
                     
                     //Chama a função para inserir um novo genero no Banco de dados
-                    let resultFilmesGeneros = await generoDAO.setUpdateFilmeGenero(filmeGenero)
+                    let resultFilmesGeneros = await filmeGeneroDAO.setUpdateFilmeGenero(filmeGenero);
 
                     if (resultFilmesGeneros) {
                         
-                        MESSAGES.DEFAULT_HEADER.status               = MESSAGES.SUCCESS_UPDATED_ITEM.status
-                        MESSAGES.DEFAULT_HEADER.status_code          = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
-                        MESSAGES.DEFAULT_HEADER.message              = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.filme_genero   = resultFilmesGeneros
+                        responseJSON.DEFAULT_HEADER.status = MESSAGES.SUCCESS_UPDATED_ITEM.status;
+                        responseJSON.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code;
+                        responseJSON.DEFAULT_HEADER.message = MESSAGES.SUCCESS_UPDATED_ITEM.message;
+                        responseJSON.DEFAULT_HEADER.items.filme_genero = filmeGenero; // Assuming you want to return the updated object
 
-                        return MESSAGES.DEFAULT_HEADER //200
+                        return responseJSON.DEFAULT_HEADER; //200
                     } else {
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                     }
@@ -274,14 +274,14 @@ const excluirFilmeGenero = async function (id) {
 
         if (validarID.status_code == 200) {
             // Chama a função do DAO para deletar o genero
-            let resultGenero = await generoDAO.setDeleteFilmeGenero(id)
+            let resultFilmeGenero = await filmeGeneroDAO.setDeleteFilmeGenero(id);
 
-            if (resultGenero) {
+            if (resultFilmeGenero) {
                 // Retorna a mensagem de sucesso
-                return MESSAGES.SUCCESS_DELETED_ITEM // 200
+                return MESSAGES.SUCCESS_DELETED_ITEM; // 200
             } else {
                 // Retorna erro se o DAO falhar
-                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; // 500
             }
         } else {
             // Retorna o erro se o ID não for encontrado ou for inválido
@@ -299,18 +299,18 @@ const excluirFilmeGenero = async function (id) {
 const validarDadosFilmeGenero = async function (filmeGenero) {
 
     //Criando um objeto novo para as mensagens
-    let MESSAGES = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
+    let validationResponse = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER));
 
     //Validação do tipo de conteúdo da requisição obrigatório ser em jSON, em maiusculo como string
-    if(filmeGenero.id_filme <=0 || isNaN(filmeGenero.id_filme == '' || filmeGenero.id_filme == undefined || filmeGenero.id_filme == null || filmeGenero.id_filme.length > 100)) {
+    if(filmeGenero.id_filme <=0 || isNaN(filmeGenero.id_filme) || filmeGenero.id_filme == '' || filmeGenero.id_filme == undefined || filmeGenero.id_filme == null) {
 
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [id_filme incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS //400
+        validationResponse.ERROR_REQUIRED_FIELDS.message += ' [id_filme incorreto]';
+        return validationResponse.ERROR_REQUIRED_FIELDS; //400
 
-    } else if(filmeGenero.id_genero <=0 || isNaN(filmeGenero.id_genero == '' || filmeGenero.id_genero == undefined || filmeGenero.id_genero == null || filmeGenero.id_genero.length > 100)) {
+    } else if(filmeGenero.id_genero <=0 || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero == '' || filmeGenero.id_genero == undefined || filmeGenero.id_genero == null) {
 
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [id_genero incorreto]'
-        return MESSAGES.ERROR_REQUIRED_FIELDS //400
+        validationResponse.ERROR_REQUIRED_FIELDS.message += ' [id_genero incorreto]';
+        return validationResponse.ERROR_REQUIRED_FIELDS; //400
 
     } else {
         return false

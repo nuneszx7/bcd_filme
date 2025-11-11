@@ -100,15 +100,19 @@ const inserirFilme = async function (filme, contentType) {
 
                 if (resultFilme) {
 
+                    //chama a função para receber o ID gerado no BD
                     let lastID = await filmeDAO.getSelectLastID()
 
                     if (lastID) {
 
                         //Processar a inserção dos dados na tabela de relação entre filme e genero
-                        filme.genero.forEach(function(genero){
-
+                        filme.genero.forEach(async function(genero){
+                            //Cria o JSON com o ID do filme e o ID do genero
                             let filmeGenero = {id_filme: lastID, id_genero: genero.id}
 
+                            //Encaminha o JSON com o ID do filme e do genero para a controller FilmeGenero
+                            let resultFilmeGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+                            console.log(resultFilmeGenero)
                         })
 
                         //Adiciona o ID no JSON com os dados do filme
