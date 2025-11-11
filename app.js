@@ -31,6 +31,7 @@ app.use((request, response, next) => {
 const controller_filme = require('./controller/filme/controller_filme.js')
 const controller_personagem = require('./controller/personagem/controller_personagem.js');
 const controller_genero = require('./controller/genero/controller_genero.js');
+const controller_filme_genero = require('./controller/filme/controller_filme_genero.js');
 
 
 //EndPoints para a rota de Filme
@@ -195,6 +196,18 @@ app.get('/v1/locadora/genero/:id', cors(), async function (request, response) {
 
     response.status(genero.status_code)
     response.json(genero)
+})
+
+//retorna o(s) genero(s) do filme pesquisando pelo ID do filme
+app.get('/v1/locadora/genero/filme/:id', cors(), async function (request, response) {
+
+    let idFilme = request.params.id
+
+    let generos = await controller_filme_genero.listarGenerosIdFilme(idFilme)
+
+    response.status(generos.status_code)
+    response.json(generos)
+
 })
 
 // insere um novo genero no banco de dados

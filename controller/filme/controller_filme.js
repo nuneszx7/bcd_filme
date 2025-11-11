@@ -127,10 +127,14 @@ const inserirFilme = async function (filme, contentType) {
                         filmeJSON.message = MESSAGES.SUCCESS_CREATED_ITEM.message
 
                         //Adicionar no JSON dados do GENERO
+                            //Apaga o atributo genero apenas com os ids que foram enviados no post
                         delete filme.genero
-                        
+
+                        //pesquisa no BD todos os generos que foram associados ao filme
                         let resultDadosGeneros = await controllerFilmeGenero.listarGenerosIdFilme(lastID)
-                        filme.genero = resultDadosGeneros
+
+                        //cria novamente o atributo genero e coloca o resultado 
+                        filme.genero = resultDadosGeneros.items.filmeGenero
 
                     }return filmeJSON //201
 
@@ -222,15 +226,24 @@ const excluirFilme = async function (id) {
             let validarID = await buscarFilmeId(id);
 
             if (validarID.status_code == 200) {
-                // Chama a função do DAO para deletar o filme
-                let resultFilme = await filmeDAO.setDeleteMovies(id);
+                // Primeiro, deleta todas as relações na tabela filme_genero
+                const resultFilmeGenero = await controllerFilmeGenero.excluirFilmeGeneroPorFilme(id);
 
-                if (resultFilme) {
-                    // Retorna a mensagem de sucesso
-                    return MESSAGES.SUCCESS_DELETED_ITEM; // 200
+                // Verifica se as relações foram deletadas ou se não existiam
+                if (resultFilmeGenero) {
+                    // Agora, chama a função do DAO para deletar o filme
+                    let resultFilme = await filmeDAO.setDeleteMovies(id);
+    
+                    if (resultFilme) {
+                        // Retorna a mensagem de sucesso
+                        return MESSAGES.SUCCESS_DELETED_ITEM; // 200
+                    } else {
+                        // Retorna erro se o DAO do filme falhar
+                        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; // 500
+                    }
                 } else {
-                    // Retorna erro se o DAO falhar
-                    return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; // 500
+                    // Retorna erro se a exclusão das relações falhar
+                    return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; // 500 - Erro ao deletar as relações
                 }
             } else {
                 // Retorna o erro se o ID não for encontrado ou for inválido
@@ -238,6 +251,7 @@ const excluirFilme = async function (id) {
             }
 
         } catch (error) {
+            console.log(error);
             return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER; // 500
         }
 

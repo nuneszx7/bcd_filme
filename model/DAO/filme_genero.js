@@ -209,6 +209,26 @@ const setDeleteFilmeGenero = async function (id) {
 
 }
 
+//Deleta um genero pelo ID do filme no banco de dados
+// const setDeleteFilmeGeneroByFilmeId = async function (idFilme) {
+
+//     try {
+//         // Usando o método seguro $executeRaw para DELETE
+//         let result = await prisma.$executeRaw`DELETE FROM tbl_filme_genero WHERE id_filme = ${idFilme}`;
+
+//         if (result)
+//             return true
+//         else
+//             return false
+    
+//         } catch (error) {
+//             console.log(error)
+//             return false
+//         }
+
+// }
+
+
 
 
 
@@ -224,6 +244,7 @@ module.exports = {
     getSelectLastID,
     setInsertFilmeGenero,
     setUpdateFilmeGenero,
-    setDeleteFilmeGenero
+    setDeleteFilmeGenero,
+    // setDeleteFilmeGeneroByFilmeId
 
 }

@@ -317,6 +317,36 @@ const validarDadosFilmeGenero = async function (filmeGenero) {
     }
 }
 
+// const excluirFilmeGeneroPorFilme = async function (idFilme) {
+
+//     try {
+
+//         let validarID = await buscarFilmeGeneroId(idFilme)
+
+//         if (validarID.status_code == 200) {
+
+//             let filmeGenero = await filmeGeneroDAO.setDeleteFilmeGeneroByFilmeId(idFilme)
+
+//             if (filmeGenero) {
+//                 return MESSAGES.SUCCESS_DELETED_ITEM; // 200
+//             } else {
+//                 return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; // 500
+//             }
+//         } else {
+//             return validarID
+
+//         }
+        
+//     } catch (error) {
+//         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+
+        
+//     }
+
+
+// }
+
+    
 
 
 module.exports = {
@@ -328,6 +358,7 @@ module.exports = {
     inserirFilmeGenero,
     atualizarFilmeGenero,
     excluirFilmeGenero,
-    validarDadosFilmeGenero
+    validarDadosFilmeGenero,
+    // excluirFilmeGeneroPorFilme
 
 }
