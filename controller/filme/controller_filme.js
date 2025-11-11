@@ -106,20 +106,31 @@ const inserirFilme = async function (filme, contentType) {
                     if (lastID) {
 
                         //Processar a inserção dos dados na tabela de relação entre filme e genero
-                        filme.genero.forEach(async function(genero){
+                        for(genero of filme.genero){
+                        // filme.genero.forEach(async function(genero){
                             //Cria o JSON com o ID do filme e o ID do genero
                             let filmeGenero = {id_filme: lastID, id_genero: genero.id}
 
                             //Encaminha o JSON com o ID do filme e do genero para a controller FilmeGenero
                             let resultFilmeGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
-                            console.log(resultFilmeGenero)
-                        })
+                            // console.log(resultFilmeGenero)
+
+                            if(resultFilmeGenero.status_code != 201){
+                                return MESSAGES.ERROR_RELATIONAL_INSERTION //500
+                            }
+                        }
 
                         //Adiciona o ID no JSON com os dados do filme
                         filme.id = lastID
                         filmeJSON.status = MESSAGES.SUCCESS_CREATED_ITEM.status
                         filmeJSON.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         filmeJSON.message = MESSAGES.SUCCESS_CREATED_ITEM.message
+
+                        //Adicionar no JSON dados do GENERO
+                        delete filme.genero
+                        
+                        let resultDadosGeneros = await controllerFilmeGenero.listarGenerosIdFilme(lastID)
+                        filme.genero = resultDadosGeneros
 
                     }return filmeJSON //201
 
@@ -204,7 +215,7 @@ const atualizarFilme = async function (filme, id, contentType) {
     }
 
     //Função para deletar um filme
-    const excluirFilme = async function (id) {
+const excluirFilme = async function (id) {
 
         try {
             // Validação de ID válido
@@ -231,7 +242,7 @@ const atualizarFilme = async function (filme, id, contentType) {
         }
 
 
-    }
+}
 
     //Validação dos dados de cadastro e atualização do filme
     const validarDadosFilme = async function (filme) {

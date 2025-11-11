@@ -57,6 +57,12 @@ const ERROR_REQUIRED_FIELDS = {
     message: 'Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados ou estão incorretos!'
 }
 
+const ERROR_RELATIONAL_INSERTION = {
+    status: false,
+    status_code: 500,
+    message: 'A requisição do item principal foi processada com sucesso! Porém, ocorreu um erro ao realizar a inserção de dados na tabela de relação.'
+}
+
 module.exports = {
     DEFAULT_HEADER,
     SUCESS_REQUEST,
@@ -67,5 +73,6 @@ module.exports = {
     SUCCESS_CREATED_ITEM,
     SUCCESS_UPDATED_ITEM,
     SUCCESS_DELETED_ITEM,
-    ERROR_CONTENT_TYPE
+    ERROR_CONTENT_TYPE,
+    ERROR_RELATIONAL_INSERTION
 }   
