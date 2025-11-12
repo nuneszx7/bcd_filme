@@ -23,20 +23,37 @@ const listarFilmes = async function () {
     // Criando um objeto novo para as mensagens
     let filmesJSON = JSON.parse(JSON.stringify(MESSAGES.DEFAULT_HEADER))
 
-    if (resultFilmes) {
-        if (resultFilmes.length > 0) {
-            filmesJSON.status = MESSAGES.SUCESS_REQUEST.status
-            filmesJSON.status_code = MESSAGES.SUCESS_REQUEST.status_code
-            filmesJSON.items.filmes = resultFilmes
-            filmesJSON.items.quantidade = resultFilmes.length
+    try {
+        if (resultFilmes) {
+            if (resultFilmes.length > 0) {
 
-            return filmesJSON
+                //Processamento para adicionar os generos aos filmes
+                    for(filme of resultFilmes){
+                        let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.id)
+
+
+                        if(resultGeneros.status_code == 200)
+                            filme.genero = resultGeneros.items.filme_genero
+                    }
+
+                //
+                filmesJSON.status = MESSAGES.SUCESS_REQUEST.status
+                filmesJSON.status_code = MESSAGES.SUCESS_REQUEST.status_code
+                filmesJSON.items.filmes = resultFilmes
+                // filmesJSON.items.quantidade = resultFilmes.length
+    
+                return filmesJSON
+            } else {
+                return MESSAGES.ERROR_NOT_FOUND // 404
+            }
         } else {
-            return MESSAGES.ERROR_NOT_FOUND // 404
+            return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
         }
-    } else {
-        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
+
+    
 }
 
 //Função para buscar um filme pesquisando pelo seu ID
@@ -126,7 +143,7 @@ const inserirFilme = async function (filme, contentType) {
                         filmeJSON.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         filmeJSON.message = MESSAGES.SUCCESS_CREATED_ITEM.message
 
-                        //Adicionar no JSON dados do GENERO
+                    //Adicionar no JSON dados do GENERO
                             //Apaga o atributo genero apenas com os ids que foram enviados no post
                         delete filme.genero
 
@@ -135,6 +152,9 @@ const inserirFilme = async function (filme, contentType) {
 
                         //cria novamente o atributo genero e coloca o resultado 
                         filme.genero = resultDadosGeneros.items.filmeGenero
+                    //
+
+                        filmeJSON.DEFAULT_HEADER        =   filme
 
                     }return filmeJSON //201
 

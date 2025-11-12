@@ -209,7 +209,8 @@ const setDeleteFilmeGenero = async function (id) {
 
 }
 
-//Deleta um genero pelo ID do filme no banco de dados
+//-----------------------------------(NÃO FUNCIONA)-----------------------------------
+//Deleta um genero pelo ID do filme no banco de dados 
 // const setDeleteFilmeGeneroByFilmeId = async function (idFilme) {
 
 //     try {

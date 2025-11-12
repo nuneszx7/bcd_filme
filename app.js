@@ -32,6 +32,7 @@ const controller_filme = require('./controller/filme/controller_filme.js')
 const controller_personagem = require('./controller/personagem/controller_personagem.js');
 const controller_genero = require('./controller/genero/controller_genero.js');
 const controller_filme_genero = require('./controller/filme/controller_filme_genero.js');
+const controller_classificacao = require('./controller/classificação/controller_classificacao.js');
 
 
 //EndPoints para a rota de Filme
@@ -251,6 +252,16 @@ app.delete('/v1/locadora/genero/:id', cors(), async function (request, response)
     response.json(genero)
 })
 
+// Listar todas as classificações
+app.get('/v1/locadora/classificacao', cors(), async function (request, response) {
+
+    let classificacao = await controller_classificacao.listarClassificacoes()
+
+    response.status(classificacao.status_code)
+    response.json(classificacao)
+
+})
+   
 
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
