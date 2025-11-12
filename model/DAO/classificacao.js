@@ -10,6 +10,7 @@ const { PrismaClient } = require('../../generated/prisma')
 //Cria um novo objeto baseado na classe do PrismaClient
 const prisma = new PrismaClient();
 
+//Função que retorna uma lista contendo todas as classificações
 const getSelectAllClassificacoes = async function () {
 
     try {
@@ -31,9 +32,56 @@ const getSelectAllClassificacoes = async function () {
 
 }
 
+//Função para retornar uma classificação quando buscada pelo seu ID
+const getSelectByIdClassificacao = async function (id) {
+
+    try {
+        //Script
+        //Metodo seguro $queryRaw
+        let result = await prisma.$queryRaw`SELECT * FROM tbl_classificacao WHERE id = ${id}`
+
+        if (result.length > 0)
+            return result
+        else
+            return false
+
+    } catch (error) {
+        return false        
+    }
+
+
+}
+
+//Função que retorna o ultimo ID gerado no BD
+const getSelectLastID = async function (){
+
+    try {
+        //Script para retornar somente o ultimo ID
+        let sql = `select id from tbl_classificacao order by id desc limit 1`
+
+        //Encaminha para o BD o script SQL
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if(Array.isArray(result))
+            return Number(result[0].id)
+        else
+            return false
+
+    } catch (error){
+        return false
+    }
+
+}
+
+
+
+
 
 module.exports = {
 
-    getSelectAllClassificacoes
+    getSelectAllClassificacoes,
+    getSelectByIdClassificacao,
+    getSelectLastID,
+
 
 }

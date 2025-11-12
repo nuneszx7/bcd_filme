@@ -206,6 +206,7 @@ const atualizarFilme = async function (filme, id, contentType) {
 
                         //Chama a função para inserir um novo filme no Banco de dados
                         let resultFilme = await filmeDAO.setUpdateMovies(filme)
+                        
 
                         if (resultFilme) {
                             // console.log(filmeJSON.SUCCESS_UPDATED_ITEM)

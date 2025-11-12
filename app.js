@@ -174,8 +174,6 @@ app.delete('/v1/locadora/personagem/:id', cors(), async function (request, respo
     response.json(personagem)
 })
 
-
-
 // retorna todos os generos do banco de dados
 app.get('/v1/locadora/genero', cors(), async function (request, response) {
     //Chama a função para listar os generos do banco de dados

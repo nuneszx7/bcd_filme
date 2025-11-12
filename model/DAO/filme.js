@@ -152,7 +152,7 @@ const setUpdateMovies = async function (filme) {
             duracao            =   '${filme.duracao}',
             orcamento          =   '${filme.orcamento}',
             trailer            =   '${filme.trailer}',
-            capa                =   '${filme.capa}'   
+            capa               =   '${filme.capa}'
 
             where id = ${filme.id}`
 

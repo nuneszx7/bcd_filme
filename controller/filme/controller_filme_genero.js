@@ -317,34 +317,25 @@ const validarDadosFilmeGenero = async function (filmeGenero) {
     }
 }
 
-// const excluirFilmeGeneroPorFilme = async function (idFilme) {
+const excluirGenerosDeFilme = async function (idFilme) {
+    try {
+        if (isNaN(idFilme) || idFilme <= 0) {
+            return MESSAGES.ERROR_REQUIRED_FIELDS; // 400
+        }
 
-//     try {
+        const result = await filmeGeneroDAO.setDeleteAllGenerosFromFilme(idFilme);
 
-//         let validarID = await buscarFilmeGeneroId(idFilme)
-
-//         if (validarID.status_code == 200) {
-
-//             let filmeGenero = await filmeGeneroDAO.setDeleteFilmeGeneroByFilmeId(idFilme)
-
-//             if (filmeGenero) {
-//                 return MESSAGES.SUCCESS_DELETED_ITEM; // 200
-//             } else {
-//                 return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; // 500
-//             }
-//         } else {
-//             return validarID
-
-//         }
+        if (result) {
+            return true; // Sucesso
+        } else {
+            return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; // 500
+        }
         
-//     } catch (error) {
-//         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500
-
-        
-//     }
-
-
-// }
+    } catch (error) {
+        console.log(error);
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER; // 500
+    }
+}
 
     
 
@@ -359,6 +350,6 @@ module.exports = {
     atualizarFilmeGenero,
     excluirFilmeGenero,
     validarDadosFilmeGenero,
-    // excluirFilmeGeneroPorFilme
+    excluirGenerosDeFilme
 
 }
