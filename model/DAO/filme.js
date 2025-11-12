@@ -143,28 +143,24 @@ const setInsertMovies = async function (filme) {
 const setUpdateMovies = async function (filme) {
 
     try {
-        
-        let sql =`
-        UPDATE tbl_filme SET
-            nome               =   '${filme.nome}',
-            sinopse            =   '${filme.sinopse}',
-            data_lancamento    =   '${filme.data_lancamento}',
-            duracao            =   '${filme.duracao}',
-            orcamento          =   '${filme.orcamento}',
-            trailer            =   '${filme.trailer}',
-            capa               =   '${filme.capa}'
+        // Usando o método seguro $executeRaw com template literals para evitar SQL Injection
+        let result = await prisma.$executeRaw`
+            UPDATE tbl_filme SET
+                nome               =   ${filme.nome},
+                sinopse            =   ${filme.sinopse},
+                data_lancamento    =   ${filme.data_lancamento},
+                duracao            =   ${filme.duracao},
+                orcamento          =   ${filme.orcamento},
+                trailer            =   ${filme.trailer},
+                capa               =   ${filme.capa}
+            WHERE id = ${filme.id}`;
 
-            where id = ${filme.id}`
-
-        //executeRawUnsafe() ->
-        let result = await prisma.$executeRawUnsafe(sql)
-
-
-
-    if (result)
-        return true
-    else
-        return false
+        // $executeRaw retorna o número de linhas afetadas.
+        // Se for > 0, a atualização funcionou.
+        if (result)
+            return true;
+        else
+            return false;
 
     } catch (error) {
         console.log(error)

@@ -214,6 +214,8 @@ const atualizarFilme = async function (filme, id, contentType) {
                             filmeJSON.DEFAULT_HEADER.status_code = filmeJSON.SUCCESS_UPDATED_ITEM.status_code
                             filmeJSON.DEFAULT_HEADER.message = filmeJSON.SUCCESS_UPDATED_ITEM.message
                             filmeJSON.DEFAULT_HEADER.items.filme = filme
+                            filmeJSON.DEFAULT_HEADER.items.genero = filme.genero
+
 
 
                             return filmeJSON.DEFAULT_HEADER //200
