@@ -32,6 +32,7 @@ const controller_filme = require('./controller/filme/controller_filme.js')
 const controller_personagem = require('./controller/personagem/controller_personagem.js');
 const controller_genero = require('./controller/genero/controller_genero.js');
 const controller_filme_genero = require('./controller/filme/controller_filme_genero.js');
+const controller_ator = require('./controller/ator/controller_ator.js');
 const controller_classificacao = require('./controller/classificação/controller_classificacao.js');
 
 
@@ -260,6 +261,69 @@ app.get('/v1/locadora/classificacao', cors(), async function (request, response)
 
 })
    
+//EndPoints para a rota de Ator
+
+// retorna todos os atores do banco de dados
+app.get('/v1/locadora/ator', cors(), async function (request, response) {
+
+    let ator = await controller_ator.listarAtores()
+
+    response.status(ator.status_code)
+    response.json(ator)
+
+})
+
+// retorna um ator filtrando pelo seu ID
+app.get('/v1/locadora/ator/:id', cors(), async function (request, response) {
+
+    //Recebe o ID encaminhado via parametro na requisição
+    let idAtor = request.params.id
+    //Chama a função para listar os atores do BD
+    let ator = await controller_ator.buscarAtorId(idAtor)
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+// insere um novo ator no banco de dados
+app.post('/v1/locadora/ator', cors(), bodyParserJSON, async function (request, response) {
+
+    let dadosBody = request.body
+    let contentType = request.headers['content-type']
+    let ator = await controller_ator.inserirAtor(dadosBody, contentType)
+
+    response.status(ator.status_code)
+    response.json(ator)
+
+})
+
+// atualiza um ator existente no banco de dados
+app.put('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function (request, response) {
+
+    //recebe o id do ator
+    let idAtor = request.params.id
+    //Recebe os dados a serem atualizados
+    let dadosBody = request.body
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+    //chama a funçao que atualiza o ator
+    let ator = await controller_ator.atualizarAtor(dadosBody, idAtor, contentType)
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+// deleta um ator existente no banco de dados
+app.delete('/v1/locadora/ator/:id', cors(), async function (request, response) {
+
+    //Receber o id do ator
+    let idAtor = request.params.id
+    //chama a função que deleta o ator
+    let ator = await controller_ator.excluirAtor(idAtor)
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
 
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
