@@ -41,8 +41,14 @@ const getSelectAllPersonagens = async function () {
 
     try {
         // Script SQL
-        // Usando o método seguro $queryRaw com template literals
-        let result = await prisma.$queryRaw`SELECT * FROM tbl_personagem ORDER BY id_personagem DESC`
+        let result = await prisma.$queryRaw`
+            SELECT 
+                tbl_personagem.id_personagem, tbl_personagem.nome_personagem, tbl_personagem.descricao, tbl_personagem.objetivo,
+                tbl_ator.id AS id_ator, tbl_ator.nome AS nome_ator, tbl_ator.data_nascimento, tbl_ator.biografia
+            FROM tbl_personagem
+            INNER JOIN tbl_ator ON tbl_ator.id = tbl_personagem.id_ator
+            ORDER BY tbl_personagem.id_personagem DESC
+        `
 
         // O prisma.$queryRaw retorna um array
         if (result.length > 0)
@@ -63,8 +69,13 @@ const getPersonagemById = async function (id_personagem) {
     try {
 
         //Script SQL
-        // Usando o método seguro $queryRaw com template literals e passando o 'id' como parâmetro
-        let result = await prisma.$queryRaw`SELECT * FROM tbl_personagem WHERE id_personagem = ${id_personagem}`
+        let result = await prisma.$queryRaw`
+            SELECT 
+                tbl_personagem.id_personagem, tbl_personagem.nome_personagem, tbl_personagem.descricao, tbl_personagem.objetivo,
+                tbl_ator.id AS id_ator, tbl_ator.nome AS nome_ator, tbl_ator.data_nascimento, tbl_ator.biografia
+            FROM tbl_personagem
+            INNER JOIN tbl_ator ON tbl_ator.id = tbl_personagem.id_ator
+            WHERE tbl_personagem.id_personagem = ${id_personagem}`
 
 
         if (result.length > 0)
@@ -112,13 +123,13 @@ const setInsertPersonagem = async function (personagem) {
         INSERT INTO tbl_personagem (
             nome_personagem,
             descricao,
-            ator_nome,
-            objetivo
+            objetivo,
+            id_ator
         ) VALUES (
             ${personagem.nome_personagem},
             ${personagem.descricao},
-            ${personagem.ator_nome},
-            ${personagem.objetivo}
+            ${personagem.objetivo},
+            ${personagem.id_ator}
         )`;
 
         if (result)
@@ -137,18 +148,13 @@ const setInsertPersonagem = async function (personagem) {
 const setUpdatePersonagem = async function (personagem) {
 
     try {
-
-        let sql = `
+        let result = await prisma.$executeRaw`
         UPDATE tbl_personagem SET
-            nome_personagem    =   '${personagem.nome_personagem}',
-            descricao          =   '${personagem.descricao}',
-            ator_nome          =   '${personagem.ator_nome}',
-            objetivo           =   '${personagem.objetivo}'
-
-            where id_personagem = ${personagem.id_personagem}`
-
-        //executeRawUnsafe() ->
-        let result = await prisma.$executeRawUnsafe(sql)
+            nome_personagem    =   ${personagem.nome_personagem},
+            descricao          =   ${personagem.descricao},
+            objetivo           =   ${personagem.objetivo},
+            id_ator            =   ${personagem.id_ator}
+        WHERE id_personagem = ${personagem.id_personagem}`
 
         if (result)
             return true

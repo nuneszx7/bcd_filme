@@ -8,7 +8,7 @@
 //Import da dependência do Prisma que permite a execução de script SQL no banco de dados
 const { PrismaClient } = require('../../generated/prisma')
 //Cria um novo objeto baseado na classe do PrismaClient
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 //Função que retorna uma lista contendo todas as classificações
 const getSelectAllClassificacoes = async function () {

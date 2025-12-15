@@ -153,7 +153,7 @@ const atualizarPersonagem = async function (personagem, id_personagem, contentTy
                 if (validarID.status_code == 200) {
 
                     //Adiciona o ID do filme no JSON de dados)
-                    personagem.id_personagem = Number(id_personagem);
+                    personagem.id_personagem = Number(id_personagem)
 
                     //Chama a função para inserir um novo
                     let resultPersonagem = await personagemDAO.setUpdatePersonagem(personagem)
@@ -225,6 +225,10 @@ const validarDadosPersonagem = async function (personagem) {
     if (personagem.nome_personagem == '' || personagem.nome_personagem == undefined || personagem.nome_personagem == null || personagem.nome_personagem.length > 100) {
 
         personagemJSON.message += ' [Nome incorreto]'
+        return personagemJSON //400
+    
+    } else if (personagem.id_ator == undefined || isNaN(personagem.id_ator) || personagem.id_ator <= 0) {
+        personagemJSON.message += ' [ID do ator incorreto]'
         return personagemJSON //400
 
     } else {

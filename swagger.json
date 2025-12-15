@@ -1,0 +1,1386 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API Locadora de Filmes",
+    "description": "API para gerenciar dados de uma locadora de filmes, incluindo filmes, atores, gêneros, personagens e classificações.",
+    "contact": {
+      "name": "João Pedro Teodoro Nunes Correia"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/v1/locadora",
+  "tags": [
+    {
+      "name": "Filme",
+      "description": "Endpoints para gerenciar Filmes"
+    },
+    {
+      "name": "Ator",
+      "description": "Endpoints para gerenciar Atores"
+    },
+    {
+      "name": "Personagem",
+      "description": "Endpoints para gerenciar Personagens"
+    },
+    {
+      "name": "Gênero",
+      "description": "Endpoints para gerenciar Gêneros"
+    },
+    {
+      "name": "Classificação",
+      "description": "Endpoints para gerenciar Classificações"
+    },
+    {
+      "name": "Diretor",
+      "description": "Endpoints para gerenciar Diretores"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/locadora/filme": {
+      "get": {
+        "tags": [
+          "Filme"
+        ],
+        "summary": "Listar todos os filmes",
+        "description": "Endpoint para listar todos os filmes cadastrados.",
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Filme"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Não encontrado",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Filme"
+        ],
+        "summary": "Inserir um novo filme",
+        "description": "Endpoint para cadastrar um novo filme.",
+        "parameters": [
+          {
+            "name": "content-type",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do filme",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Filme"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/Filme"
+            }
+          }
+        }
+      }
+    },
+    "/v1/locadora/filme/{id}": {
+      "get": {
+        "tags": [
+          "Filme"
+        ],
+        "summary": "Buscar filme por ID",
+        "description": "Endpoint para buscar um filme pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do filme"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso",
+            "schema": {
+              "$ref": "#/definitions/Filme"
+            }
+          },
+          "400": {
+            "description": "ID inválido",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Não encontrado",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Filme"
+        ],
+        "summary": "Atualizar um filme",
+        "description": "Endpoint para atualizar os dados de um filme existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do filme"
+          },
+          {
+            "name": "content-type",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados para atualização",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Filme"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atualizado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/Filme"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Filme"
+        ],
+        "summary": "Excluir um filme",
+        "description": "Endpoint para excluir um filme pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do filme"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Excluído com sucesso"
+          }
+        }
+      }
+    },
+    "/v1/locadora/personagem": {
+      "get": {
+        "tags": [
+          "Personagem"
+        ],
+        "summary": "Listar todos os personagens",
+        "description": "Endpoint para listar todos os personagens.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Personagem"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Personagem"
+        ],
+        "summary": "Inserir um novo personagem",
+        "description": "Endpoint para cadastrar um novo personagem.",
+        "parameters": [
+          {
+            "name": "content-type",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do personagem",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Personagem"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/locadora/personagem/{id}": {
+      "get": {
+        "tags": [
+          "Personagem"
+        ],
+        "summary": "Buscar personagem por ID",
+        "description": "Endpoint para buscar um personagem pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do personagem"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Personagem"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Personagem"
+        ],
+        "summary": "Atualizar um personagem",
+        "description": "Endpoint para atualizar os dados de um personagem.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do personagem"
+          },
+          {
+            "name": "content-type",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados para atualização",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Personagem"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Personagem"
+        ],
+        "summary": "Excluir um personagem",
+        "description": "Endpoint para excluir um personagem pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do personagem"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Excluído com sucesso"
+          }
+        }
+      }
+    },
+    "/v1/locadora/genero": {
+      "get": {
+        "tags": [
+          "Gênero"
+        ],
+        "summary": "Listar todos os gêneros",
+        "description": "Endpoint para listar todos os gêneros.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Genero"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Gênero"
+        ],
+        "summary": "Inserir um novo gênero",
+        "description": "Endpoint para cadastrar um novo gênero.",
+        "parameters": [
+          {
+            "name": "content-type",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do gênero",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Genero"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/locadora/genero/{id}": {
+      "get": {
+        "tags": [
+          "Gênero"
+        ],
+        "summary": "Buscar gênero por ID",
+        "description": "Endpoint para buscar um gênero pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do gênero"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Genero"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Gênero"
+        ],
+        "summary": "Atualizar um gênero",
+        "description": "Endpoint para atualizar os dados de um gênero.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do gênero"
+          },
+          {
+            "name": "content-type",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados para atualização",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Genero"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Gênero"
+        ],
+        "summary": "Excluir um gênero",
+        "description": "Endpoint para excluir um gênero pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do gênero"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Excluído com sucesso"
+          }
+        }
+      }
+    },
+    "/v1/locadora/genero/filme/{id}": {
+      "get": {
+        "tags": [
+          "Gênero"
+        ],
+        "summary": "Listar gêneros de um filme específico",
+        "description": "Endpoint para listar todos os gêneros associados a um filme pelo ID do filme.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do filme"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Genero"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/locadora/classificacao": {
+      "get": {
+        "tags": [
+          "Classificação"
+        ],
+        "summary": "Listar todas as classificações",
+        "description": "Endpoint para listar todas as classificações indicativas.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Classificacao"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Classificação"
+        ],
+        "summary": "Inserir uma nova classificação",
+        "description": "Endpoint para cadastrar uma nova classificação.",
+        "parameters": [
+          {
+            "name": "content-type",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados da classificação",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Classificacao"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/locadora/classificacao/{id}": {
+      "get": {
+        "tags": [
+          "Classificação"
+        ],
+        "summary": "Buscar classificação por ID",
+        "description": "Endpoint para buscar uma classificação pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID da classificação"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Classificacao"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Classificação"
+        ],
+        "summary": "Atualizar uma classificação",
+        "description": "Endpoint para atualizar os dados de uma classificação.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID da classificação"
+          },
+          {
+            "name": "content-type",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados para atualização",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Classificacao"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Classificação"
+        ],
+        "summary": "Excluir uma classificação",
+        "description": "Endpoint para excluir uma classificação pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID da classificação"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Excluído com sucesso"
+          }
+        }
+      }
+    },
+    "/v1/locadora/ator": {
+      "get": {
+        "tags": [
+          "Ator"
+        ],
+        "summary": "Listar todos os atores",
+        "description": "Endpoint para listar todos os atores.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Ator"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ator"
+        ],
+        "summary": "Inserir um novo ator",
+        "description": "Endpoint para cadastrar um novo ator.",
+        "parameters": [
+          {
+            "name": "content-type",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do ator",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Ator"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/locadora/ator/{id}": {
+      "get": {
+        "tags": [
+          "Ator"
+        ],
+        "summary": "Buscar ator por ID",
+        "description": "Endpoint para buscar um ator pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do ator"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Ator"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Ator"
+        ],
+        "summary": "Atualizar um ator",
+        "description": "Endpoint para atualizar os dados de um ator.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do ator"
+          },
+          {
+            "name": "content-type",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados para atualização",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Ator"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ator"
+        ],
+        "summary": "Excluir um ator",
+        "description": "Endpoint para excluir um ator pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do ator"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Excluído com sucesso"
+          }
+        }
+      }
+    },
+    "/v1/locadora/diretor": {
+      "get": {
+        "tags": [
+          "Diretor"
+        ],
+        "summary": "Listar todos os diretores",
+        "description": "Endpoint para listar todos os diretores.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Diretor"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Diretor"
+        ],
+        "summary": "Inserir um novo diretor",
+        "description": "Endpoint para cadastrar um novo diretor.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do diretor",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Diretor"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado com sucesso"
+          },
+          "400": {
+            "description": "Campos obrigatórios faltando"
+          }
+        }
+      }
+    },
+    "/v1/locadora/diretor/{id}": {
+      "get": {
+        "tags": [
+          "Diretor"
+        ],
+        "summary": "Buscar diretor por ID",
+        "description": "Endpoint para buscar um diretor pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do diretor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Diretor"
+            }
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Diretor"
+        ],
+        "summary": "Atualizar um diretor",
+        "description": "Endpoint para atualizar os dados de um diretor.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do diretor"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados para atualização",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Diretor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atualizado com sucesso"
+          },
+          "400": {
+            "description": "Campos obrigatórios faltando"
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Diretor"
+        ],
+        "summary": "Excluir um diretor",
+        "description": "Endpoint para excluir um diretor pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do diretor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Excluído com sucesso"
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      }
+    },
+    "/v1/locadora/diretor/filme/{id}": {
+      "get": {
+        "tags": [
+          "Diretor"
+        ],
+        "summary": "Listar diretores de um filme específico",
+        "description": "Endpoint para listar todos os diretores associados a um filme pelo ID do filme.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do filme"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Diretor"
+              }
+            }
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Filme": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "integer"
+            },
+            "example": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        },
+        "nome": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "O Segredo do Vale"
+            }
+          }
+        },
+        "sinopse": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "Uma aventura misteriosa em um vale escondido."
+            }
+          }
+        },
+        "data_lancamento": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "format": {
+              "type": "string",
+              "example": "date"
+            },
+            "example": {
+              "type": "string",
+              "example": "2023-10-26"
+            }
+          }
+        },
+        "duracao": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "02:15:00"
+            }
+          }
+        },
+        "orcamento": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "number"
+            },
+            "format": {
+              "type": "string",
+              "example": "float"
+            },
+            "example": {
+              "type": "number",
+              "example": 50000000
+            }
+          }
+        },
+        "trailer": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "http://youtube.com/watch?v=trailer"
+            }
+          }
+        },
+        "capa": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "http://example.com/capa.jpg"
+            }
+          }
+        },
+        "genero": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "array"
+            },
+            "items": {
+              "$ref": "#/definitions/Genero"
+            }
+          }
+        }
+      }
+    },
+    "Ator": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "integer"
+            },
+            "example": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        },
+        "nome": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "Tom Holland"
+            }
+          }
+        },
+        "data_nascimento": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "format": {
+              "type": "string",
+              "example": "date"
+            },
+            "example": {
+              "type": "string",
+              "example": "1996-06-01"
+            }
+          }
+        },
+        "biografia": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "Ator britânico conhecido por seu papel como Homem-Aranha."
+            }
+          }
+        },
+        "id_sexo": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "integer"
+            },
+            "example": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        }
+      }
+    },
+    "Personagem": {
+      "type": "object",
+      "properties": {
+        "id_personagem": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "integer"
+            },
+            "example": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        },
+        "nome_personagem": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "Peter Parker"
+            }
+          }
+        },
+        "descricao": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "Um jovem com super-poderes de aranha."
+            }
+          }
+        },
+        "objetivo": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "Proteger a cidade de Nova York."
+            }
+          }
+        },
+        "id_ator": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "integer"
+            },
+            "example": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        }
+      }
+    },
+    "Genero": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "integer"
+            },
+            "example": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        },
+        "nome": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "Aventura"
+            }
+          }
+        }
+      }
+    },
+    "Classificacao": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "integer"
+            },
+            "example": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        },
+        "sigla": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "L"
+            }
+          }
+        },
+        "descricao": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "Livre para todos os públicos"
+            }
+          }
+        },
+        "icone": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "http://example.com/livre.png"
+            }
+          }
+        }
+      }
+    },
+    "Diretor": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "nome": {
+          "type": "string",
+          "example": "Quentin Tarantino"
+        },
+        "data_nascimento": {
+          "type": "string",
+          "format": "date",
+          "example": "1963-03-27"
+        },
+        "biografia": {
+          "type": "string",
+          "example": "Quentin Jerome Tarantino é um diretor, roteirista, produtor e ator americano. Seus filmes são caracterizados por diálogos estilizados, narrativa não linear, e referências à cultura pop."
+        },
+        "id_sexo": {
+          "type": "integer",
+          "example": 1
+        }
+      },
+      "required": [
+        "nome",
+        "data_nascimento",
+        "biografia",
+        "id_sexo"
+      ]
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "boolean"
+            },
+            "example": {
+              "type": "boolean",
+              "example": false
+            }
+          }
+        },
+        "status_code": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "integer"
+            },
+            "example": {
+              "type": "number",
+              "example": 404
+            }
+          }
+        },
+        "message": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "string"
+            },
+            "example": {
+              "type": "string",
+              "example": "Não foram encontrados dados de retorno!"
+            }
+          }
+        }
+      }
+    }
+  }
+}

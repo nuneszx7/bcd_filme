@@ -30,15 +30,34 @@ app.use((request, response, next) => {
 //Import das controllers
 const controller_filme = require('./controller/filme/controller_filme.js')
 const controller_personagem = require('./controller/personagem/controller_personagem.js');
-const controller_genero = require('./controller/genero/controller_genero.js');
-const controller_filme_genero = require('./controller/filme/controller_filme_genero.js');
-const controller_ator = require('./controller/ator/controller_ator.js');
-const controller_classificacao = require('./controller/classificação/controller_classificacao.js');
+const controller_genero = require('./controller/genero/controller_genero.js')
+const controller_filme_genero = require('./controller/filme/controller_filme_genero.js')
+const controller_ator = require('./controller/ator/controller_ator.js')
+const controller_classificacao = require('./controller/classificação/controller_classificacao.js')
+
+// Import para o Swagger
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger.json')
+
+// Endpoint para a documentação
+app.use('/v1/locadora/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 
 //EndPoints para a rota de Filme
 // retorna todos os filmes do banco de dados
 app.get('/v1/locadora/filme', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Filme']
+        #swagger.summary = 'Listar todos os filmes'
+        #swagger.description = 'Endpoint para listar todos os filmes cadastrados.'
+        #swagger.responses[200] = {
+            description: 'Sucesso',
+            schema: [{ $ref: '#/definitions/Filme' }]
+        }
+        #swagger.responses[404] = { description: 'Não encontrado', schema: { $ref: '#/definitions/Error' } }
+        #swagger.responses[500] = { description: 'Erro interno', schema: { $ref: '#/definitions/Error' } }
+    */
+
     //Chama a função para listar os filmes do banco de dados
     let filme = await controller_filme.listarFilmes()
 
@@ -49,6 +68,18 @@ app.get('/v1/locadora/filme', cors(), async function (request, response) {
 
 // retorna um filme filtrando pelo seu ID
 app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Filme']
+        #swagger.summary = 'Buscar filme por ID'
+        #swagger.description = 'Endpoint para buscar um filme pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID do filme', type: 'integer', required: true }
+        #swagger.responses[200] = {
+            description: 'Sucesso',
+            schema: { $ref: '#/definitions/Filme' }
+        }
+        #swagger.responses[400] = { description: 'ID inválido', schema: { $ref: '#/definitions/Error' } }
+        #swagger.responses[404] = { description: 'Não encontrado', schema: { $ref: '#/definitions/Error' } }
+    */
 
     //Recebe o ID encaminhado via parametro na requisição
     let idFilme = request.params.id
@@ -63,6 +94,18 @@ app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
 
 // insere um novo filme no banco de dados
 app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Filme']
+        #swagger.summary = 'Inserir um novo filme'
+        #swagger.description = 'Endpoint para cadastrar um novo filme.'
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados do filme',
+            required: true,
+            schema: { $ref: '#/definitions/Filme' }
+        }
+        #swagger.responses[201] = { description: 'Criado com sucesso', schema: { $ref: '#/definitions/Filme' } }
+    */
 
     //Recebe os dados do body (corpo) da requisição (caso vc utilizar o bodyParser, é obrigatório ter no EndPoint)
     let dadosBody = request.body
@@ -78,6 +121,19 @@ app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, 
 
 // atualiza um filme existente no banco de dados
 app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Filme']
+        #swagger.summary = 'Atualizar um filme'
+        #swagger.description = 'Endpoint para atualizar os dados de um filme existente.'
+        #swagger.parameters['id'] = { description: 'ID do filme', type: 'integer', required: true }
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados para atualização',
+            required: true,
+            schema: { $ref: '#/definitions/Filme' }
+        }
+        #swagger.responses[200] = { description: 'Atualizado com sucesso', schema: { $ref: '#/definitions/Filme' } }
+    */
 
     //Recebe o id do filme
     let idFilme = request.params.id
@@ -99,6 +155,13 @@ app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (reques
 
 // deleta um filme existente no banco de dados
 app.delete('/v1/locadora/filme/:id', cors(), async function (request, response){
+    /*
+        #swagger.tags = ['Filme']
+        #swagger.summary = 'Excluir um filme'
+        #swagger.description = 'Endpoint para excluir um filme pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID do filme', type: 'integer', required: true }
+        #swagger.responses[200] = { description: 'Excluído com sucesso' }
+    */
 
     //receber o id do filme
     let idFilme = request.params.id
@@ -115,6 +178,12 @@ app.delete('/v1/locadora/filme/:id', cors(), async function (request, response){
 
 // retorna todos os personagens do banco de dados
 app.get('/v1/locadora/personagem', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Personagem']
+        #swagger.summary = 'Listar todos os personagens'
+        #swagger.description = 'Endpoint para listar todos os personagens.'
+        #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Personagem' }] }
+    */
 
     let personagem = await controller_personagem.listarPersonagens()
 
@@ -125,6 +194,13 @@ app.get('/v1/locadora/personagem', cors(), async function (request, response) {
 
 // retorna um personagem filtrando pelo seu ID
 app.get('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Personagem']
+        #swagger.summary = 'Buscar personagem por ID'
+        #swagger.description = 'Endpoint para buscar um personagem pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID do personagem', type: 'integer', required: true }
+        #swagger.responses[200] = { schema: { $ref: '#/definitions/Personagem' } }
+    */
 
     //Recebe o ID encaminhado via parametro na requisição
     let idPersonagem = request.params.id
@@ -137,6 +213,17 @@ app.get('/v1/locadora/personagem/:id', cors(), async function (request, response
 
 // insere um novo personagem no banco de dados
 app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Personagem']
+        #swagger.summary = 'Inserir um novo personagem'
+        #swagger.description = 'Endpoint para cadastrar um novo personagem.'
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados do personagem',
+            required: true,
+            schema: { $ref: '#/definitions/Personagem' }
+        }
+    */
 
     let dadosBody = request.body
     let contentType = request.headers['content-type']
@@ -149,6 +236,18 @@ app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (requ
 
 // atualiza um personagem existente no banco de dados
 app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Personagem']
+        #swagger.summary = 'Atualizar um personagem'
+        #swagger.description = 'Endpoint para atualizar os dados de um personagem.'
+        #swagger.parameters['id'] = { description: 'ID do personagem', type: 'integer', required: true }
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados para atualização',
+            required: true,
+            schema: { $ref: '#/definitions/Personagem' }
+        }
+    */
 
     //recebe o id do personagem
     let idPersonagem = request.params.id
@@ -165,6 +264,13 @@ app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (r
 
 // deleta um personagem existente no banco de dados
 app.delete('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Personagem']
+        #swagger.summary = 'Excluir um personagem'
+        #swagger.description = 'Endpoint para excluir um personagem pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID do personagem', type: 'integer', required: true }
+        #swagger.responses[200] = { description: 'Excluído com sucesso' }
+    */
 
     //Receber o id do personagem
     let idPersonagem = request.params.id
@@ -177,6 +283,12 @@ app.delete('/v1/locadora/personagem/:id', cors(), async function (request, respo
 
 // retorna todos os generos do banco de dados
 app.get('/v1/locadora/genero', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Gênero']
+        #swagger.summary = 'Listar todos os gêneros'
+        #swagger.description = 'Endpoint para listar todos os gêneros.'
+        #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Genero' }] }
+    */
     //Chama a função para listar os generos do banco de dados
     let genero = await controller_genero.listarGeneros()
 
@@ -187,6 +299,13 @@ app.get('/v1/locadora/genero', cors(), async function (request, response) {
 
 // retorna um genero filtrando pelo seu ID
 app.get('/v1/locadora/genero/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Gênero']
+        #swagger.summary = 'Buscar gênero por ID'
+        #swagger.description = 'Endpoint para buscar um gênero pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID do gênero', type: 'integer', required: true }
+        #swagger.responses[200] = { schema: { $ref: '#/definitions/Genero' } }
+    */
 
     //Recebe o ID encaminhado via parametro na requisição
     let idGenero = request.params.id
@@ -200,6 +319,13 @@ app.get('/v1/locadora/genero/:id', cors(), async function (request, response) {
 
 //retorna o(s) genero(s) do filme pesquisando pelo ID do filme
 app.get('/v1/locadora/genero/filme/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Gênero']
+        #swagger.summary = 'Listar gêneros de um filme específico'
+        #swagger.description = 'Endpoint para listar todos os gêneros associados a um filme pelo ID do filme.'
+        #swagger.parameters['id'] = { description: 'ID do filme', type: 'integer', required: true }
+        #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Genero' }] }
+    */
 
     let idFilme = request.params.id
 
@@ -212,6 +338,17 @@ app.get('/v1/locadora/genero/filme/:id', cors(), async function (request, respon
 
 // insere um novo genero no banco de dados
 app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Gênero']
+        #swagger.summary = 'Inserir um novo gênero'
+        #swagger.description = 'Endpoint para cadastrar um novo gênero.'
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados do gênero',
+            required: true,
+            schema: { $ref: '#/definitions/Genero' }
+        }
+    */
 
     //Recebe os dados do body (corpo) da requisição
     let dadosBody = request.body
@@ -229,6 +366,18 @@ app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function (request,
 
 // Atualiza um genero existente no banco de dados
 app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Gênero']
+        #swagger.summary = 'Atualizar um gênero'
+        #swagger.description = 'Endpoint para atualizar os dados de um gênero.'
+        #swagger.parameters['id'] = { description: 'ID do gênero', type: 'integer', required: true }
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados para atualização',
+            required: true,
+            schema: { $ref: '#/definitions/Genero' }
+        }
+    */
 
     //Recebe o id do genero
     let idGenero = request.params.id
@@ -245,16 +394,112 @@ app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function (reque
 
 //Deleta um genero existente no banco de dados
 app.delete('/v1/locadora/genero/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Gênero']
+        #swagger.summary = 'Excluir um gênero'
+        #swagger.description = 'Endpoint para excluir um gênero pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID do gênero', type: 'integer', required: true }
+        #swagger.responses[200] = { description: 'Excluído com sucesso' }
+    */
     let idGenero = request.params.id
     let genero = await controller_genero.excluirGenero(idGenero)
     response.status(genero.status_code)
     response.json(genero)
 })
 
-// Listar todas as classificações
+//EndPoints para a rota de Classificação
+
+// Retorna todas as classificações
 app.get('/v1/locadora/classificacao', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Classificação']
+        #swagger.summary = 'Listar todas as classificações'
+        #swagger.description = 'Endpoint para listar todas as classificações indicativas.'
+        #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Classificacao' }] }
+    */
 
     let classificacao = await controller_classificacao.listarClassificacoes()
+
+    response.status(classificacao.status_code)
+    response.json(classificacao)
+
+})
+
+// Retorna uma classificação pelo ID
+app.get('/v1/locadora/classificacao/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Classificação']
+        #swagger.summary = 'Buscar classificação por ID'
+        #swagger.description = 'Endpoint para buscar uma classificação pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID da classificação', type: 'integer', required: true }
+        #swagger.responses[200] = { schema: { $ref: '#/definitions/Classificacao' } }
+    */
+
+    let idClassificacao = request.params.id
+    let classificacao = await controller_classificacao.buscarClassificacaoId(idClassificacao)
+
+    response.status(classificacao.status_code)
+    response.json(classificacao)
+})
+
+// Insere uma nova classificação
+app.post('/v1/locadora/classificacao', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Classificação']
+        #swagger.summary = 'Inserir uma nova classificação'
+        #swagger.description = 'Endpoint para cadastrar uma nova classificação.'
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados da classificação',
+            required: true,
+            schema: { $ref: '#/definitions/Classificacao' }
+        }
+    */
+
+    let dadosBody = request.body
+    let contentType = request.headers['content-type']
+    let classificacao = await controller_classificacao.inserirClassificacao(dadosBody, contentType)
+
+    response.status(classificacao.status_code)
+    response.json(classificacao)
+})
+
+// Atualiza uma classificação existente
+app.put('/v1/locadora/classificacao/:id', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Classificação']
+        #swagger.summary = 'Atualizar uma classificação'
+        #swagger.description = 'Endpoint para atualizar os dados de uma classificação.'
+        #swagger.parameters['id'] = { description: 'ID da classificação', type: 'integer', required: true }
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados para atualização',
+            required: true,
+            schema: { $ref: '#/definitions/Classificacao' }
+        }
+    */
+
+    let idClassificacao = request.params.id
+    let dadosBody = request.body
+    let contentType = request.headers['content-type']
+    let classificacao = await controller_classificacao.atualizarClassificacao(dadosBody, idClassificacao, contentType)
+
+    response.status(classificacao.status_code)
+    response.json(classificacao)
+})
+
+// Deleta uma classificação existente
+app.delete('/v1/locadora/classificacao/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Classificação']
+        #swagger.summary = 'Excluir uma classificação'
+        #swagger.description = 'Endpoint para excluir uma classificação pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID da classificação', type: 'integer', required: true }
+        #swagger.responses[200] = { description: 'Excluído com sucesso' }
+    */
+
+    let idClassificacao = request.params.id
+    let classificacao = await controller_classificacao.excluirClassificacao(idClassificacao)
 
     response.status(classificacao.status_code)
     response.json(classificacao)
@@ -265,6 +510,12 @@ app.get('/v1/locadora/classificacao', cors(), async function (request, response)
 
 // retorna todos os atores do banco de dados
 app.get('/v1/locadora/ator', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Ator']
+        #swagger.summary = 'Listar todos os atores'
+        #swagger.description = 'Endpoint para listar todos os atores.'
+        #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Ator' }] }
+    */
 
     let ator = await controller_ator.listarAtores()
 
@@ -275,6 +526,13 @@ app.get('/v1/locadora/ator', cors(), async function (request, response) {
 
 // retorna um ator filtrando pelo seu ID
 app.get('/v1/locadora/ator/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Ator']
+        #swagger.summary = 'Buscar ator por ID'
+        #swagger.description = 'Endpoint para buscar um ator pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID do ator', type: 'integer', required: true }
+        #swagger.responses[200] = { schema: { $ref: '#/definitions/Ator' } }
+    */
 
     //Recebe o ID encaminhado via parametro na requisição
     let idAtor = request.params.id
@@ -287,6 +545,17 @@ app.get('/v1/locadora/ator/:id', cors(), async function (request, response) {
 
 // insere um novo ator no banco de dados
 app.post('/v1/locadora/ator', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Ator']
+        #swagger.summary = 'Inserir um novo ator'
+        #swagger.description = 'Endpoint para cadastrar um novo ator.'
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados do ator',
+            required: true,
+            schema: { $ref: '#/definitions/Ator' }
+        }
+    */
 
     let dadosBody = request.body
     let contentType = request.headers['content-type']
@@ -299,6 +568,18 @@ app.post('/v1/locadora/ator', cors(), bodyParserJSON, async function (request, r
 
 // atualiza um ator existente no banco de dados
 app.put('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Ator']
+        #swagger.summary = 'Atualizar um ator'
+        #swagger.description = 'Endpoint para atualizar os dados de um ator.'
+        #swagger.parameters['id'] = { description: 'ID do ator', type: 'integer', required: true }
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Dados para atualização',
+            required: true,
+            schema: { $ref: '#/definitions/Ator' }
+        }
+    */
 
     //recebe o id do ator
     let idAtor = request.params.id
@@ -315,6 +596,13 @@ app.put('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function (request
 
 // deleta um ator existente no banco de dados
 app.delete('/v1/locadora/ator/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Ator']
+        #swagger.summary = 'Excluir um ator'
+        #swagger.description = 'Endpoint para excluir um ator pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID do ator', type: 'integer', required: true }
+        #swagger.responses[200] = { description: 'Excluído com sucesso' }
+    */
 
     //Receber o id do ator
     let idAtor = request.params.id

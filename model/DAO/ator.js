@@ -1,6 +1,6 @@
 /*********************************************************************************************** 
 * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente aos atores
-* Data: 12/11/2025
+* Data: 08/12/2025
 * Autor: João Pedro Teodoro Nunes Correia
 * Versão: 1.0
 ************************************************************************************************/
