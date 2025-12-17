@@ -1,218 +1,148 @@
-/************************************************************************************************
- * Objetivo: Arquivo responsável pela manipulação de recebimento, tratamento e retorno de dados *
- * entre a API e a model de Diretor                                                             *
- * Autor: João Pedro Teodoro                                                                    *
- * Data de criação: 15/12/2025                                                                  *
- * Versão: 1.0.0                                                                                *
- ************************************************************************************************/
+/***************************************************************************************************** 
+* Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de diretores
+* Data: 15/12/2025
+* Autor: João Pedro Teodoro Nunes Correia
+* Versão: 1.0.0
+****************************************************************************************************/
 
-// Import do arquivo de configuração do projeto
-const message = require('../module/config.js')
+const diretorDAO = require('../../model/DAO/diretor.js')
+const MESSAGES = require('../modulo/config_messages.js')
 
-// Import do arquivo DAO para manipular dados do BD
-const diretorDAO = require('../model/DAO/diretor.js')
+//Função que retorna uma lista de todos os diretores
+const listarDiretores = async function () {
+    let resultDiretores = await diretorDAO.selectAllDiretores()
+    let diretoresJSON = {}
 
-// Função para inserir um novo diretor
-const setNovoDiretor = async function (dadosDiretor, contentType) {
-    try {
-        if (String(contentType).toLowerCase() == 'application/json') {
-            let novoDiretorJson = {}
-            if (dadosDiretor.nome == '' || dadosDiretor.nome == undefined || dadosDiretor.nome == null || dadosDiretor.nome.length > 100 ||
-                dadosDiretor.data_nascimento == '' || dadosDiretor.data_nascimento == undefined || dadosDiretor.data_nascimento == null || dadosDiretor.data_nascimento.length != 10 ||
-                dadosDiretor.biografia == '' || dadosDiretor.biografia == undefined || dadosDiretor.biografia == null ||
-                dadosDiretor.id_sexo == '' || dadosDiretor.id_sexo == undefined || dadosDiretor.id_sexo == null || isNaN(dadosDiretor.id_sexo)
-            ) {
-                return message.ERROR_REQUIRED_FIELDS // 400
-            } else {
-                let validateStatus = true
-
-                if (validateStatus) {
-                    let novoDiretor = await diretorDAO.insertDiretor(dadosDiretor)
-
-                    if (novoDiretor) {
-                        let idDiretor = await diretorDAO.selectLastId()
-                        dadosDiretor.id = Number(idDiretor[0].id)
-                        novoDiretorJson.diretor = dadosDiretor
-                        novoDiretorJson.status_code = message.SUCCESS_CREATED_ITEM.status_code // 201
-                        novoDiretorJson.status = message.SUCCESS_CREATED_ITEM.status
-                        novoDiretorJson.message = message.SUCCESS_CREATED_ITEM.message
-
-                        return novoDiretorJson
-                    } else {
-                        return message.ERROR_INTERNAL_SERVER_DB // 500
-                    }
-                }
-            }
+    if (resultDiretores) {
+        if (resultDiretores.length > 0) {
+            diretoresJSON.status = MESSAGES.SUCESS_REQUEST.status
+            diretoresJSON.status_code = MESSAGES.SUCESS_REQUEST.status_code
+            diretoresJSON.quantidade = resultDiretores.length
+            diretoresJSON.diretores = resultDiretores
+            return diretoresJSON
         } else {
-            return message.ERROR_CONTENT_TYPE // 415
+            return MESSAGES.ERROR_NOT_FOUND
         }
-    } catch (error) {
-        return message.ERROR_INTERNAL_SERVER // 500
+    } else {
+        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL
     }
 }
 
-// Função para atualizar um diretor existente
-const setAtualizarDiretor = async function (id, dadosDiretor, contentType) {
-    try {
-        if (String(contentType).toLowerCase() == 'application/json') {
-            let idDiretor = id
-            if (idDiretor == '' || idDiretor == undefined || isNaN(idDiretor)) {
-                return message.ERROR_INVALID_ID
-            } else {
-                let diretor = await diretorDAO.selectByIdDiretor(idDiretor)
-                if (diretor) {
-                    let atualizarDiretorJson = {}
-                    if (dadosDiretor.nome == '' || dadosDiretor.nome == undefined || dadosDiretor.nome == null || dadosDiretor.nome.length > 100 ||
-                        dadosDiretor.data_nascimento == '' || dadosDiretor.data_nascimento == undefined || dadosDiretor.data_nascimento == null || dadosDiretor.data_nascimento.length != 10 ||
-                        dadosDiretor.biografia == '' || dadosDiretor.biografia == undefined || dadosDiretor.biografia == null ||
-                        dadosDiretor.id_sexo == '' || dadosDiretor.id_sexo == undefined || dadosDiretor.id_sexo == null || isNaN(dadosDiretor.id_sexo)
-                    ) {
-                        return message.ERROR_REQUIRED_FIELDS // 400
-                    } else {
-                        let validateStatus = true
+//Função para buscar um diretor pesquisando pelo seu ID
+const buscarDiretorId = async function (id) {
+    if (!id || isNaN(id) || id <= 0) {
+        return MESSAGES.ERROR_INVALID_ID
+    }
 
-                        if (validateStatus) {
-                            let dados = {
-                                id: idDiretor,
-                                ...dadosDiretor
-                            }
-                            let diretorAtualizado = await diretorDAO.updateDiretor(dados)
+    let resultDiretor = await diretorDAO.selectByIdDiretor(id)
+    let diretorJSON = {}
 
-                            if (diretorAtualizado) {
-                                atualizarDiretorJson.diretor = dados
-                                atualizarDiretorJson.status_code = message.SUCCESS_UPDATED_ITEM.status_code // 200
-                                atualizarDiretorJson.status = message.SUCCESS_UPDATED_ITEM.status
-                                atualizarDiretorJson.message = message.SUCCESS_UPDATED_ITEM.message
-
-                                return atualizarDiretorJson
-                            } else {
-                                return message.ERROR_INTERNAL_SERVER_DB // 500
-                            }
-                        }
-                    }
-                } else {
-                    return message.ERROR_NOT_FOUND // 404
-                }
-            }
+    if (resultDiretor) {
+        if (resultDiretor.length > 0) {
+            diretorJSON.status = MESSAGES.SUCESS_REQUEST.status
+            diretorJSON.status_code = MESSAGES.SUCESS_REQUEST.status_code
+            diretorJSON.diretor = resultDiretor[0]
+            return diretorJSON
         } else {
-            return message.ERROR_CONTENT_TYPE // 415
+            return MESSAGES.ERROR_NOT_FOUND
         }
-    } catch (error) {
-        return message.ERROR_INTERNAL_SERVER // 500
+    } else {
+        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL
     }
 }
 
-// Função para excluir um diretor
-const setExcluirDiretor = async function (id) {
-    try {
-        let idDiretor = id
+//Função que insere um novo diretor
+const inserirDiretor = async function (dadosDiretor, contentType) {
+    if (String(contentType).toLowerCase() !== 'application/json') {
+        return MESSAGES.ERROR_CONTENT_TYPE
+    }
 
-        if (idDiretor == '' || idDiretor == undefined || isNaN(idDiretor)) {
-            return message.ERROR_INVALID_ID
-        } else {
-            let diretor = await diretorDAO.selectByIdDiretor(idDiretor)
+    if (!dadosDiretor.nome || dadosDiretor.nome.trim() === '' || dadosDiretor.nome.length > 100 ||
+        !dadosDiretor.data_nascimento || dadosDiretor.data_nascimento.length !== 10 ||
+        !dadosDiretor.biografia ||
+        !dadosDiretor.id_sexo || isNaN(dadosDiretor.id_sexo)) {
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+    }
 
-            if (diretor) {
-                let result = await diretorDAO.deleteDiretor(idDiretor)
+    let resultNovoDiretor = await diretorDAO.insertDiretor(dadosDiretor)
 
-                if (result) {
-                    return message.SUCCESS_DELETED_ITEM // 200
-                } else {
-                    return message.ERROR_INTERNAL_SERVER_DB // 500
-                }
-            } else {
-                return message.ERROR_NOT_FOUND // 404
+    if (resultNovoDiretor) {
+        let lastId = await diretorDAO.selectLastId()
+        if (lastId) {
+            let novoDiretorJSON = {
+                status: MESSAGES.SUCCESS_CREATED_ITEM.status,
+                status_code: MESSAGES.SUCCESS_CREATED_ITEM.status_code,
+                message: MESSAGES.SUCCESS_CREATED_ITEM.message,
+                diretor: { id: lastId, ...dadosDiretor }
             }
+            return novoDiretorJSON
         }
-    } catch (error) {
-        return message.ERROR_INTERNAL_SERVER // 500
+    }
+    return MESSAGES.ERROR_INTERNAL_SERVER_MODEL
+}
+
+//Função para atualizar um diretor buscando pelo ID
+const atualizarDiretor = async function (dadosDiretor, id, contentType) {
+    if (String(contentType).toLowerCase() !== 'application/json') {
+        return MESSAGES.ERROR_CONTENT_TYPE
+    }
+
+    if (!id || isNaN(id) || id <= 0) {
+        return MESSAGES.ERROR_INVALID_ID
+    }
+
+    if (!dadosDiretor.nome || dadosDiretor.nome.trim() === '' || dadosDiretor.nome.length > 100 ||
+        !dadosDiretor.data_nascimento || dadosDiretor.data_nascimento.length !== 10 ||
+        !dadosDiretor.biografia ||
+        !dadosDiretor.id_sexo || isNaN(dadosDiretor.id_sexo)) {
+        return MESSAGES.ERROR_REQUIRED_FIELDS
+    }
+
+    const diretorExistente = await diretorDAO.selectByIdDiretor(id)
+    if (!diretorExistente) {
+        return MESSAGES.ERROR_NOT_FOUND
+    }
+
+    dadosDiretor.id = id
+    let resultUpdate = await diretorDAO.updateDiretor(dadosDiretor)
+
+    if (resultUpdate) {
+        let diretorAtualizadoJSON = {
+            status: MESSAGES.SUCCESS_UPDATED_ITEM.status,
+            status_code: MESSAGES.SUCCESS_UPDATED_ITEM.status_code,
+            message: MESSAGES.SUCCESS_UPDATED_ITEM.message,
+            diretor: dadosDiretor
+        }
+        return diretorAtualizadoJSON
+    } else {
+        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL
     }
 }
 
-// Função para listar todos os diretores
-const getListarDiretores = async function () {
-    try {
-        let diretoresJson = {}
-        let dadosDiretores = await diretorDAO.selectAllDiretores()
-
-        if (dadosDiretores) {
-            if (dadosDiretores.length > 0) {
-                diretoresJson.diretores = dadosDiretores
-                diretoresJson.quantidade = dadosDiretores.length
-                diretoresJson.status_code = 200
-                return diretoresJson
-            } else {
-                return message.ERROR_NOT_FOUND // 404
-            }
-        } else {
-            return message.ERROR_INTERNAL_SERVER_DB // 500
-        }
-    } catch (error) {
-        return message.ERROR_INTERNAL_SERVER // 500
+//Função para deletar um diretor
+const excluirDiretor = async function (id) {
+    if (!id || isNaN(id) || id <= 0) {
+        return MESSAGES.ERROR_INVALID_ID
     }
-}
 
-// Função para buscar um diretor pelo ID
-const getBuscarDiretor = async function (id) {
-    try {
-        let idDiretor = id
-        let diretorJson = {}
-
-        if (idDiretor == '' || idDiretor == undefined || isNaN(idDiretor)) {
-            return message.ERROR_INVALID_ID // 400
-        } else {
-            let dadosDiretor = await diretorDAO.selectByIdDiretor(idDiretor)
-
-            if (dadosDiretor) {
-                if (dadosDiretor.length > 0) {
-                    diretorJson.diretor = dadosDiretor
-                    diretorJson.status_code = 200
-                    return diretorJson
-                } else {
-                    return message.ERROR_NOT_FOUND // 404
-                }
-            } else {
-                return message.ERROR_INTERNAL_SERVER_DB // 500
-            }
-        }
-    } catch (error) {
-        return message.ERROR_INTERNAL_SERVER // 500
+    const diretorExistente = await diretorDAO.selectByIdDiretor(id)
+    if (!diretorExistente) {
+        return MESSAGES.ERROR_NOT_FOUND
     }
-}
 
-// Função para buscar diretores de um filme
-const getDiretoresByFilme = async function (idFilme) {
-    try {
-        let id = idFilme
-        let diretoresJson = {}
+    let resultDelete = await diretorDAO.deleteDiretor(id)
 
-        if (id == '' || id == undefined || isNaN(id)) {
-            return message.ERROR_INVALID_ID // 400
-        } else {
-            let dadosDiretores = await diretorDAO.selectDiretoresByFilme(id)
-
-            if (dadosDiretores) {
-                if (dadosDiretores.length > 0) {
-                    diretoresJson.diretores = dadosDiretores
-                    diretoresJson.status_code = 200
-                    return diretoresJson
-                } else {
-                    return message.ERROR_NOT_FOUND // 404
-                }
-            } else {
-                return message.ERROR_INTERNAL_SERVER_DB // 500
-            }
-        }
-    } catch (error) {
-        return message.ERROR_INTERNAL_SERVER // 500
+    if (resultDelete) {
+        return MESSAGES.SUCCESS_DELETED_ITEM
+    } else {
+        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL
     }
 }
 
 module.exports = {
-    setNovoDiretor,
-    setAtualizarDiretor,
-    setExcluirDiretor,
-    getListarDiretores,
-    getBuscarDiretor,
-    getDiretoresByFilme
+    listarDiretores,
+    buscarDiretorId,
+    inserirDiretor,
+    atualizarDiretor,
+    excluirDiretor
 }

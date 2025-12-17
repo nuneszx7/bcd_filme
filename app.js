@@ -5,27 +5,27 @@
 * Versão: 1.0
 ************************************************************************************************/
 
-const express = require('express')
-const cors = require('cors')
-const bodyParser = require('body-parser')
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
 //Cria um objeto especialista no formato JSON para receber dados via POST e PUT
-const bodyParserJSON = bodyParser.json()
+const bodyParserJSON = bodyParser.json();
 
 //Retorna a porta do servidor atual ou colocamos uma porta local
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8080;
 
 //Criando uma instancia do express
-const app = express()
+const app = express();
 
 //Configuração de permissões 
 app.use((request, response, next) => {
-    response.header('Access-Control-Allow-Origin', '*') //Servidor de origem da API
-    response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS') //Verbos permitidos
+    response.header('Access-Control-Allow-Origin', '*'); //Servidor de origem da API
+    response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); //Verbos permitidos
     //Carrega as configurações no CORS da API
-    app.use(cors())
-    next()  //Próximo, carregar os próximos EndPoints
-})
+    app.use(cors());
+    next();  //Próximo, carregar os próximos EndPoints
+});
 
 //Import das controllers
 const controller_filme = require('./controller/filme/controller_filme.js')
@@ -34,13 +34,15 @@ const controller_genero = require('./controller/genero/controller_genero.js')
 const controller_filme_genero = require('./controller/filme/controller_filme_genero.js')
 const controller_ator = require('./controller/ator/controller_ator.js')
 const controller_classificacao = require('./controller/classificação/controller_classificacao.js')
+const controller_diretor = require('./controller/diretor/controller_diretor.js')
+const controller_idioma = require('./controller/idioma/controller_idioma.js')
 
 // Import para o Swagger
-const swaggerUi = require('swagger-ui-express')
-const swaggerFile = require('./swagger.json')
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger.json');
 
 // Endpoint para a documentação
-app.use('/v1/locadora/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+app.use('/v1/locadora/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 
 //EndPoints para a rota de Filme
@@ -59,10 +61,10 @@ app.get('/v1/locadora/filme', cors(), async function (request, response) {
     */
 
     //Chama a função para listar os filmes do banco de dados
-    let filme = await controller_filme.listarFilmes()
+    let filme = await controller_filme.listarFilmes();
 
-    response.status(filme.status_code)
-    response.json(filme)
+    response.status(filme.status_code);
+    response.json(filme);
 
 })
 
@@ -82,14 +84,14 @@ app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
     */
 
     //Recebe o ID encaminhado via parametro na requisição
-    let idFilme = request.params.id
+    let idFilme = request.params.id;
 
 
     //Chama a função para listar os filmes do BD
-    let filme = await controller_filme.buscarFilmeId(idFilme)
+    let filme = await controller_filme.buscarFilmeId(idFilme);
 
-    response.status(filme.status_code)
-    response.json(filme)
+    response.status(filme.status_code);
+    response.json(filme);
 })
 
 // insere um novo filme no banco de dados
@@ -108,14 +110,14 @@ app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, 
     */
 
     //Recebe os dados do body (corpo) da requisição (caso vc utilizar o bodyParser, é obrigatório ter no EndPoint)
-    let dadosBody = request.body
+    let dadosBody = request.body;
 
-    let contentType = request.headers['content-type']
+    let contentType = request.headers['content-type'];
 
-    let filme = await controller_filme.inserirFilme(dadosBody, contentType)
+    let filme = await controller_filme.inserirFilme(dadosBody, contentType);
 
-    response.status(filme.status_code)
-    response.json(filme)
+    response.status(filme.status_code);
+    response.json(filme);
 
 })
 
@@ -136,20 +138,20 @@ app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function (reques
     */
 
     //Recebe o id do filme
-    let idFilme = request.params.id
+    let idFilme = request.params.id;
 
     //Recebe os dados a serem atualizados
-    let dadosBody = request.body
+    let dadosBody = request.body;
 
     //Recebe o content-type da requisição
-    let contentType = request.headers['content-type']
+    let contentType = request.headers['content-type'];
 
     //Chama a função para atualizar o filme, e encaminha os dados, o id e o contentType
-    let filme = await controller_filme.atualizarFilme(dadosBody, idFilme, contentType)
+    let filme = await controller_filme.atualizarFilme(dadosBody, idFilme, contentType);
     // console.log(filme)
 
-    response.status(filme.status_code)
-    response.json(filme)
+    response.status(filme.status_code);
+    response.json(filme);
 
 })
 
@@ -164,13 +166,13 @@ app.delete('/v1/locadora/filme/:id', cors(), async function (request, response){
     */
 
     //receber o id do filme
-    let idFilme = request.params.id
+    let idFilme = request.params.id;
 
     //Chama a função para deletar o filme
-    let filme = await controller_filme.excluirFilme(idFilme)
+    let filme = await controller_filme.excluirFilme(idFilme);
 
-    response.status(filme.status_code)
-    response.json(filme)
+    response.status(filme.status_code);
+    response.json(filme);
 
 })
 
@@ -185,10 +187,10 @@ app.get('/v1/locadora/personagem', cors(), async function (request, response) {
         #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Personagem' }] }
     */
 
-    let personagem = await controller_personagem.listarPersonagens()
+    let personagem = await controller_personagem.listarPersonagens();
 
-    response.status(personagem.status_code)
-    response.json(personagem)
+    response.status(personagem.status_code);
+    response.json(personagem);
 
 })
 
@@ -203,12 +205,12 @@ app.get('/v1/locadora/personagem/:id', cors(), async function (request, response
     */
 
     //Recebe o ID encaminhado via parametro na requisição
-    let idPersonagem = request.params.id
+    let idPersonagem = request.params.id;
     //Chama a função para listar os personagens do BD
-    let personagem = await controller_personagem.buscarPersonagemId(idPersonagem)
+    let personagem = await controller_personagem.buscarPersonagemId(idPersonagem);
 
-    response.status(personagem.status_code)
-    response.json(personagem)
+    response.status(personagem.status_code);
+    response.json(personagem);
 })
 
 // insere um novo personagem no banco de dados
@@ -225,12 +227,12 @@ app.post('/v1/locadora/personagem', cors(), bodyParserJSON, async function (requ
         }
     */
 
-    let dadosBody = request.body
-    let contentType = request.headers['content-type']
-    let personagem = await controller_personagem.inserirPersonagem(dadosBody, contentType)
+    let dadosBody = request.body;
+    let contentType = request.headers['content-type'];
+    let personagem = await controller_personagem.inserirPersonagem(dadosBody, contentType);
 
-    response.status(personagem.status_code)
-    response.json(personagem)
+    response.status(personagem.status_code);
+    response.json(personagem);
 
 })
 
@@ -250,16 +252,16 @@ app.put('/v1/locadora/personagem/:id', cors(), bodyParserJSON, async function (r
     */
 
     //recebe o id do personagem
-    let idPersonagem = request.params.id
+    let idPersonagem = request.params.id;
     //Recebe os dados a serem atualizados
-    let dadosBody = request.body
+    let dadosBody = request.body;
     //Recebe o content-type da requisição
-    let contentType = request.headers['content-type']
+    let contentType = request.headers['content-type'];
     //chama a funçao que atualiza o personagem
-    let personagem = await controller_personagem.atualizarPersonagem(dadosBody, idPersonagem, contentType)
+    let personagem = await controller_personagem.atualizarPersonagem(dadosBody, idPersonagem, contentType);
 
-    response.status(personagem.status_code)
-    response.json(personagem)
+    response.status(personagem.status_code);
+    response.json(personagem);
 })
 
 // deleta um personagem existente no banco de dados
@@ -273,12 +275,12 @@ app.delete('/v1/locadora/personagem/:id', cors(), async function (request, respo
     */
 
     //Receber o id do personagem
-    let idPersonagem = request.params.id
+    let idPersonagem = request.params.id;
     //chama a função que deleta o personagem
-    let personagem = await controller_personagem.excluirPersonagem(idPersonagem)
+    let personagem = await controller_personagem.excluirPersonagem(idPersonagem);
 
-    response.status(personagem.status_code)
-    response.json(personagem)
+    response.status(personagem.status_code);
+    response.json(personagem);
 })
 
 // retorna todos os generos do banco de dados
@@ -290,10 +292,10 @@ app.get('/v1/locadora/genero', cors(), async function (request, response) {
         #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Genero' }] }
     */
     //Chama a função para listar os generos do banco de dados
-    let genero = await controller_genero.listarGeneros()
+    let genero = await controller_genero.listarGeneros();
 
-    response.status(genero.status_code)
-    response.json(genero)
+    response.status(genero.status_code);
+    response.json(genero);
 
 })
 
@@ -308,13 +310,13 @@ app.get('/v1/locadora/genero/:id', cors(), async function (request, response) {
     */
 
     //Recebe o ID encaminhado via parametro na requisição
-    let idGenero = request.params.id
+    let idGenero = request.params.id;
 
     //Chama a função para buscar o genero pelo ID
-    let genero = await controller_genero.buscarGeneroId(idGenero)
+    let genero = await controller_genero.buscarGeneroId(idGenero);
 
-    response.status(genero.status_code)
-    response.json(genero)
+    response.status(genero.status_code);
+    response.json(genero);
 })
 
 //retorna o(s) genero(s) do filme pesquisando pelo ID do filme
@@ -327,12 +329,12 @@ app.get('/v1/locadora/genero/filme/:id', cors(), async function (request, respon
         #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Genero' }] }
     */
 
-    let idFilme = request.params.id
+    let idFilme = request.params.id;
 
-    let generos = await controller_filme_genero.listarGenerosIdFilme(idFilme)
+    let generos = await controller_filme_genero.listarGenerosIdFilme(idFilme);
 
-    response.status(generos.status_code)
-    response.json(generos)
+    response.status(generos.status_code);
+    response.json(generos);
 
 })
 
@@ -351,16 +353,16 @@ app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function (request,
     */
 
     //Recebe os dados do body (corpo) da requisição
-    let dadosBody = request.body
+    let dadosBody = request.body;
 
     //Recebe o content-type da requisição
-    let contentType = request.headers['content-type']
+    let contentType = request.headers['content-type'];
 
     //Chama a função para inserir um novo genero
-    let genero = await controller_genero.inserirGenero(dadosBody, contentType)
+    let genero = await controller_genero.inserirGenero(dadosBody, contentType);
 
-    response.status(genero.status_code)
-    response.json(genero)
+    response.status(genero.status_code);
+    response.json(genero);
 
 })
 
@@ -380,16 +382,16 @@ app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function (reque
     */
 
     //Recebe o id do genero
-    let idGenero = request.params.id
+    let idGenero = request.params.id;
     //Recebe os dados a serem atualizados
-    let dadosBody = request.body
+    let dadosBody = request.body;
     //Recebe o content-type da requisição
-    let contentType = request.headers['content-type']
+    let contentType = request.headers['content-type'];
     //chama a funçao que atualiza o genero
-    let genero = await controller_genero.atualizarGenero(dadosBody, idGenero, contentType)
+    let genero = await controller_genero.atualizarGenero(dadosBody, idGenero, contentType);
 
-    response.status(genero.status_code)
-    response.json(genero)
+    response.status(genero.status_code);
+    response.json(genero);
 })
 
 //Deleta um genero existente no banco de dados
@@ -401,10 +403,10 @@ app.delete('/v1/locadora/genero/:id', cors(), async function (request, response)
         #swagger.parameters['id'] = { description: 'ID do gênero', type: 'integer', required: true }
         #swagger.responses[200] = { description: 'Excluído com sucesso' }
     */
-    let idGenero = request.params.id
-    let genero = await controller_genero.excluirGenero(idGenero)
-    response.status(genero.status_code)
-    response.json(genero)
+    let idGenero = request.params.id;
+    let genero = await controller_genero.excluirGenero(idGenero);
+    response.status(genero.status_code);
+    response.json(genero);
 })
 
 //EndPoints para a rota de Classificação
@@ -418,10 +420,10 @@ app.get('/v1/locadora/classificacao', cors(), async function (request, response)
         #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Classificacao' }] }
     */
 
-    let classificacao = await controller_classificacao.listarClassificacoes()
+    let classificacao = await controller_classificacao.listarClassificacoes();
 
-    response.status(classificacao.status_code)
-    response.json(classificacao)
+    response.status(classificacao.status_code);
+    response.json(classificacao);
 
 })
 
@@ -435,11 +437,11 @@ app.get('/v1/locadora/classificacao/:id', cors(), async function (request, respo
         #swagger.responses[200] = { schema: { $ref: '#/definitions/Classificacao' } }
     */
 
-    let idClassificacao = request.params.id
-    let classificacao = await controller_classificacao.buscarClassificacaoId(idClassificacao)
+    let idClassificacao = request.params.id;
+    let classificacao = await controller_classificacao.buscarClassificacaoId(idClassificacao);
 
-    response.status(classificacao.status_code)
-    response.json(classificacao)
+    response.status(classificacao.status_code);
+    response.json(classificacao);
 })
 
 // Insere uma nova classificação
@@ -456,12 +458,12 @@ app.post('/v1/locadora/classificacao', cors(), bodyParserJSON, async function (r
         }
     */
 
-    let dadosBody = request.body
-    let contentType = request.headers['content-type']
-    let classificacao = await controller_classificacao.inserirClassificacao(dadosBody, contentType)
+    let dadosBody = request.body;
+    let contentType = request.headers['content-type'];
+    let classificacao = await controller_classificacao.inserirClassificacao(dadosBody, contentType);
 
-    response.status(classificacao.status_code)
-    response.json(classificacao)
+    response.status(classificacao.status_code);
+    response.json(classificacao);
 })
 
 // Atualiza uma classificação existente
@@ -479,13 +481,13 @@ app.put('/v1/locadora/classificacao/:id', cors(), bodyParserJSON, async function
         }
     */
 
-    let idClassificacao = request.params.id
-    let dadosBody = request.body
-    let contentType = request.headers['content-type']
-    let classificacao = await controller_classificacao.atualizarClassificacao(dadosBody, idClassificacao, contentType)
+    let idClassificacao = request.params.id;
+    let dadosBody = request.body;
+    let contentType = request.headers['content-type'];
+    let classificacao = await controller_classificacao.atualizarClassificacao(dadosBody, idClassificacao, contentType);
 
-    response.status(classificacao.status_code)
-    response.json(classificacao)
+    response.status(classificacao.status_code);
+    response.json(classificacao);
 })
 
 // Deleta uma classificação existente
@@ -498,11 +500,11 @@ app.delete('/v1/locadora/classificacao/:id', cors(), async function (request, re
         #swagger.responses[200] = { description: 'Excluído com sucesso' }
     */
 
-    let idClassificacao = request.params.id
-    let classificacao = await controller_classificacao.excluirClassificacao(idClassificacao)
+    let idClassificacao = request.params.id;
+    let classificacao = await controller_classificacao.excluirClassificacao(idClassificacao);
 
-    response.status(classificacao.status_code)
-    response.json(classificacao)
+    response.status(classificacao.status_code);
+    response.json(classificacao);
 
 })
    
@@ -517,10 +519,10 @@ app.get('/v1/locadora/ator', cors(), async function (request, response) {
         #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Ator' }] }
     */
 
-    let ator = await controller_ator.listarAtores()
+    let ator = await controller_ator.listarAtores();
 
-    response.status(ator.status_code)
-    response.json(ator)
+    response.status(ator.status_code);
+    response.json(ator);
 
 })
 
@@ -535,12 +537,12 @@ app.get('/v1/locadora/ator/:id', cors(), async function (request, response) {
     */
 
     //Recebe o ID encaminhado via parametro na requisição
-    let idAtor = request.params.id
+    let idAtor = request.params.id;
     //Chama a função para listar os atores do BD
-    let ator = await controller_ator.buscarAtorId(idAtor)
+    let ator = await controller_ator.buscarAtorId(idAtor);
 
-    response.status(ator.status_code)
-    response.json(ator)
+    response.status(ator.status_code);
+    response.json(ator);
 })
 
 // insere um novo ator no banco de dados
@@ -557,12 +559,12 @@ app.post('/v1/locadora/ator', cors(), bodyParserJSON, async function (request, r
         }
     */
 
-    let dadosBody = request.body
-    let contentType = request.headers['content-type']
-    let ator = await controller_ator.inserirAtor(dadosBody, contentType)
+    let dadosBody = request.body;
+    let contentType = request.headers['content-type'];
+    let ator = await controller_ator.inserirAtor(dadosBody, contentType);
 
-    response.status(ator.status_code)
-    response.json(ator)
+    response.status(ator.status_code);
+    response.json(ator);
 
 })
 
@@ -582,16 +584,16 @@ app.put('/v1/locadora/ator/:id', cors(), bodyParserJSON, async function (request
     */
 
     //recebe o id do ator
-    let idAtor = request.params.id
+    let idAtor = request.params.id;
     //Recebe os dados a serem atualizados
-    let dadosBody = request.body
+    let dadosBody = request.body;
     //Recebe o content-type da requisição
-    let contentType = request.headers['content-type']
+    let contentType = request.headers['content-type'];
     //chama a funçao que atualiza o ator
-    let ator = await controller_ator.atualizarAtor(dadosBody, idAtor, contentType)
+    let ator = await controller_ator.atualizarAtor(dadosBody, idAtor, contentType);
 
-    response.status(ator.status_code)
-    response.json(ator)
+    response.status(ator.status_code);
+    response.json(ator);
 })
 
 // deleta um ator existente no banco de dados
@@ -605,13 +607,169 @@ app.delete('/v1/locadora/ator/:id', cors(), async function (request, response) {
     */
 
     //Receber o id do ator
-    let idAtor = request.params.id
+    let idAtor = request.params.id;
     //chama a função que deleta o ator
-    let ator = await controller_ator.excluirAtor(idAtor)
+    let ator = await controller_ator.excluirAtor(idAtor);
 
-    response.status(ator.status_code)
-    response.json(ator)
+    response.status(ator.status_code);
+    response.json(ator);
+});
+
+//EndPoints para a rota de Diretor
+
+// retorna todos os diretores do banco de dados
+app.get('/v1/locadora/diretor', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Diretor']
+        #swagger.summary = 'Listar todos os diretores'
+        #swagger.description = 'Endpoint para listar todos os diretores.'
+        #swagger.responses[200] = { schema: [{ $ref: '#/definitions/Diretor' }] }
+    */
+
+    let diretor = await controller_diretor.listarDiretores();
+
+    response.status(diretor.status_code);
+    response.json(diretor);
+
 })
 
+// retorna um diretor filtrando pelo seu ID
+app.get('/v1/locadora/diretor/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Diretor']
+        #swagger.summary = 'Buscar diretor por ID'
+        #swagger.description = 'Endpoint para buscar um diretor pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID do diretor', type: 'integer', required: true }
+        #swagger.responses[200] = { schema: { $ref: '#/definitions/Diretor' } }
+    */
 
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
+    let idDiretor = request.params.id;
+    let diretor = await controller_diretor.buscarDiretorId(idDiretor);
+
+    response.status(diretor.status_code);
+    response.json(diretor);
+})
+
+// insere um novo diretor no banco de dados
+app.post('/v1/locadora/diretor', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Diretor']
+        #swagger.summary = 'Inserir um novo diretor'
+        #swagger.description = 'Endpoint para cadastrar um novo diretor.'
+        #swagger.parameters['body'] = { in: 'body', description: 'Dados do diretor', required: true, schema: { $ref: '#/definitions/Diretor' } }
+    */
+
+    let dadosBody = request.body;
+    let contentType = request.headers['content-type'];
+    let diretor = await controller_diretor.inserirDiretor(dadosBody, contentType);
+
+    response.status(diretor.status_code);
+    response.json(diretor);
+})
+
+// atualiza um diretor existente no banco de dados
+app.put('/v1/locadora/diretor/:id', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Diretor']
+        #swagger.summary = 'Atualizar um diretor'
+        #swagger.description = 'Endpoint para atualizar os dados de um diretor.'
+        #swagger.parameters['id'] = { description: 'ID do diretor', type: 'integer', required: true }
+        #swagger.parameters['body'] = { in: 'body', description: 'Dados para atualização', required: true, schema: { $ref: '#/definitions/Diretor' } }
+    */
+
+    let idDiretor = request.params.id;
+    let dadosBody = request.body;
+    let contentType = request.headers['content-type'];
+    let diretor = await controller_diretor.atualizarDiretor(dadosBody, idDiretor, contentType);
+
+    response.status(diretor.status_code);
+    response.json(diretor);
+})
+
+// deleta um diretor existente no banco de dados
+app.delete('/v1/locadora/diretor/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Diretor']
+        #swagger.summary = 'Excluir um diretor'
+        #swagger.description = 'Endpoint para excluir um diretor pelo seu ID.'
+        #swagger.parameters['id'] = { description: 'ID do diretor', type: 'integer', required: true }
+    */
+
+    let idDiretor = request.params.id;
+    let diretor = await controller_diretor.excluirDiretor(idDiretor);
+
+    response.status(diretor.status_code);
+    response.json(diretor);
+});
+
+//EndPoints para a rota de Idioma
+
+// Retorna todos os idiomas
+app.get('/v1/locadora/idioma', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Idioma']
+        #swagger.summary = 'Listar todos os idiomas'
+    */
+    let idioma = await controller_idioma.listarIdiomas();
+    response.status(idioma.status_code);
+    response.json(idioma);
+});
+
+// Retorna um idioma pelo ID
+app.get('/v1/locadora/idioma/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Idioma']
+        #swagger.summary = 'Buscar idioma por ID'
+        #swagger.parameters['id'] = { description: 'ID do idioma', type: 'integer', required: true }
+    */
+    let idIdioma = request.params.id;
+    let idioma = await controller_idioma.buscarIdiomaId(idIdioma);
+    response.status(idioma.status_code);
+    response.json(idioma);
+});
+
+// Insere um novo idioma
+app.post('/v1/locadora/idioma', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Idioma']
+        #swagger.summary = 'Inserir um novo idioma'
+        #swagger.parameters['body'] = { in: 'body', description: 'Dados do idioma', required: true, schema: { $ref: '#/definitions/Idioma' } }
+    */
+    let dadosBody = request.body;
+    let contentType = request.headers['content-type'];
+    let idioma = await controller_idioma.inserirIdioma(dadosBody, contentType);
+    response.status(idioma.status_code);
+    response.json(idioma);
+});
+
+// Atualiza um idioma existente
+app.put('/v1/locadora/idioma/:id', cors(), bodyParserJSON, async function (request, response) {
+    /*
+        #swagger.tags = ['Idioma']
+        #swagger.summary = 'Atualizar um idioma'
+        #swagger.parameters['id'] = { description: 'ID do idioma', type: 'integer', required: true }
+        #swagger.parameters['body'] = { in: 'body', description: 'Dados para atualização', required: true, schema: { $ref: '#/definitions/Idioma' } }
+    */
+    let idIdioma = request.params.id;
+    let dadosBody = request.body;
+    let contentType = request.headers['content-type'];
+    let idioma = await controller_idioma.atualizarIdioma(idIdioma, dadosBody, contentType);
+    response.status(idioma.status_code);
+    response.json(idioma);
+});
+
+// Deleta um idioma existente
+app.delete('/v1/locadora/idioma/:id', cors(), async function (request, response) {
+    /*
+        #swagger.tags = ['Idioma']
+        #swagger.summary = 'Excluir um idioma'
+        #swagger.parameters['id'] = { description: 'ID do idioma', type: 'integer', required: true }
+    */
+    let idIdioma = request.params.id;
+    let idioma = await controller_idioma.excluirIdioma(idIdioma);
+    response.status(idioma.status_code);
+    response.json(idioma);
+});
+
+
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

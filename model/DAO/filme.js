@@ -115,7 +115,8 @@ const setInsertMovies = async function (filme) {
             duracao,
             orcamento,
             trailer,
-            capa
+            capa,
+            id_classificacao
         ) VALUES (
             ${filme.nome},
             ${filme.sinopse},
@@ -123,7 +124,8 @@ const setInsertMovies = async function (filme) {
             ${filme.duracao},
             ${filme.orcamento},
             ${filme.trailer},
-            ${filme.capa}
+            ${filme.capa},
+            ${filme.id_classificacao}
         )`;
 
     if (result)
@@ -152,7 +154,8 @@ const setUpdateMovies = async function (filme) {
                 duracao            =   ${filme.duracao},
                 orcamento          =   ${filme.orcamento},
                 trailer            =   ${filme.trailer},
-                capa               =   ${filme.capa}
+                capa               =   ${filme.capa},
+                id_classificacao   =   ${filme.id_classificacao}
             WHERE id = ${filme.id}`;
 
         // $executeRaw retorna o número de linhas afetadas.

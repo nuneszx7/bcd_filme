@@ -1016,6 +1016,15 @@
           "items": {
             "$ref": "#/definitions/Genero"
           }
+        },
+        "diretor": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Diretor"
+          }
+        },
+        "classificacao": {
+          "$ref": "#/definitions/Classificacao"
         }
       },
       "required": [
