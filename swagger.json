@@ -970,6 +970,174 @@
           }
         }
       }
+    },
+    "/v1/locadora/idioma": {
+      "get": {
+        "tags": [
+          "Idioma"
+        ],
+        "summary": "Listar todos os idiomas",
+        "description": "Endpoint para listar todos os idiomas.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Idioma"
+              }
+            }
+          },
+          "404": {
+            "description": "Não encontrado",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Idioma"
+        ],
+        "summary": "Inserir um novo idioma",
+        "description": "Endpoint para cadastrar um novo idioma.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados do idioma",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Idioma"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/Idioma"
+            }
+          },
+          "400": {
+            "description": "Campos obrigatórios faltando",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/locadora/idioma/{id}": {
+      "get": {
+        "tags": [
+          "Idioma"
+        ],
+        "summary": "Buscar idioma por ID",
+        "description": "Endpoint para buscar um idioma pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do idioma"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Idioma"
+            }
+          },
+          "404": {
+            "description": "Não encontrado",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Idioma"
+        ],
+        "summary": "Atualizar um idioma",
+        "description": "Endpoint para atualizar os dados de um idioma.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do idioma"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados para atualização",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Idioma"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atualizado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/Idioma"
+            }
+          },
+          "400": {
+            "description": "Campos obrigatórios faltando ou ID inválido",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Não encontrado",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Idioma"
+        ],
+        "summary": "Excluir um idioma",
+        "description": "Endpoint para excluir um idioma pelo seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do idioma"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Excluído com sucesso"
+          },
+          "404": {
+            "description": "Não encontrado",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -1178,7 +1346,8 @@
       "properties": {
         "id": {
           "type": "integer",
-          "example": 1
+          "example": 1,
+          "readOnly": true
         },
         "nome": {
           "type": "string",
