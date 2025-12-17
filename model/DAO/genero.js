@@ -106,7 +106,7 @@ const getSelectLastID = async function (){
 const setInsertGenero = async function (genero) {
 
     try {
-        // Usando o método seguro $executeRaw com template literals para evitar SQL Injection
+        
         let result = await prisma.$executeRaw`
         INSERT INTO tbl_genero (
             nome
@@ -129,25 +129,21 @@ const setInsertGenero = async function (genero) {
 }
 
 //Altera um genero no banco de dados
-const setUpdateGenero = async function (filme) {
+const setUpdateGenero = async function (genero) {
 
     try {
         
-        let sql =`
-        UPDATE tbl_genero SET
-            nome               =   '${genero.nome}',
+        let result = await prisma.$executeRaw`
+            UPDATE tbl_genero SET
+                nome = ${genero.nome}
+            WHERE id = ${genero.id}
+        `;
 
-            where id = ${filme.id}`
-
-        //executeRawUnsafe() ->
-        let result = await prisma.$executeRawUnsafe(sql)
-
-
-
-    if (result)
-        return true
-    else
-        return false
+        
+        if (result > 0)
+            return true;
+        else
+            return false;
 
     } catch (error) {
         console.log(error)
@@ -160,7 +156,7 @@ const setUpdateGenero = async function (filme) {
 const setDeleteGenero = async function (id) {
 
     try {
-        // Usando o método seguro $executeRaw para DELETE
+        
         let result = await prisma.$executeRaw`DELETE FROM tbl_genero WHERE id = ${id}`;
 
         if (result)

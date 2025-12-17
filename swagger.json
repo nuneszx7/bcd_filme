@@ -34,6 +34,10 @@
     {
       "name": "Diretor",
       "description": "Endpoints para gerenciar Diretores"
+    },
+    {
+      "name": "Idioma",
+      "description": "Endpoints para gerenciar Idiomas"
     }
   ],
   "schemes": [
@@ -103,9 +107,6 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
           "201": {
             "description": "Criado com sucesso",
             "schema": {
@@ -206,8 +207,11 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Excluído com sucesso"
+          },
+          "404": {
+            "description": "Não encontrado"
           }
         }
       }
@@ -257,8 +261,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/Personagem"
+            }
           }
         }
       }
@@ -339,8 +346,11 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Excluído com sucesso"
+          },
+          "404": {
+            "description": "Não encontrado"
           }
         }
       }
@@ -390,8 +400,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/Genero"
+            }
           }
         }
       }
@@ -472,8 +485,11 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Excluído com sucesso"
+          },
+          "404": {
+            "description": "Não encontrado"
           }
         }
       }
@@ -555,8 +571,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/Classificacao"
+            }
           }
         }
       }
@@ -637,8 +656,11 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Excluído com sucesso"
+          },
+          "404": {
+            "description": "Não encontrado"
           }
         }
       }
@@ -688,8 +710,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/Ator"
+            }
           }
         }
       }
@@ -770,8 +795,11 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Excluído com sucesso"
+          },
+          "404": {
+            "description": "Não encontrado"
           }
         }
       }
@@ -902,7 +930,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Excluído com sucesso"
           },
           "404": {
@@ -949,272 +977,117 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "integer"
-            },
-            "example": {
-              "type": "number",
-              "example": 1
-            }
-          }
+          "type": "integer",
+          "example": 1,
+          "readOnly": true
         },
         "nome": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "O Segredo do Vale"
-            }
-          }
+          "type": "string",
+          "example": "O Segredo do Vale"
         },
         "sinopse": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "Uma aventura misteriosa em um vale escondido."
-            }
-          }
+          "type": "string",
+          "example": "Uma aventura misteriosa em um vale escondido."
         },
         "data_lancamento": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "format": {
-              "type": "string",
-              "example": "date"
-            },
-            "example": {
-              "type": "string",
-              "example": "2023-10-26"
-            }
-          }
+          "type": "string",
+          "format": "date",
+          "example": "2023-10-26"
         },
         "duracao": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "02:15:00"
-            }
-          }
+          "type": "string",
+          "example": "02:15:00"
         },
         "orcamento": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "number"
-            },
-            "format": {
-              "type": "string",
-              "example": "float"
-            },
-            "example": {
-              "type": "number",
-              "example": 50000000
-            }
-          }
+          "type": "number",
+          "format": "float",
+          "example": 50000000
         },
         "trailer": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "http://youtube.com/watch?v=trailer"
-            }
-          }
+          "type": "string",
+          "example": "http://youtube.com/watch?v=trailer"
         },
         "capa": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "http://example.com/capa.jpg"
-            }
-          }
+          "type": "string",
+          "example": "http://example.com/capa.jpg"
         },
         "genero": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "array"
-            },
-            "items": {
-              "$ref": "#/definitions/Genero"
-            }
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Genero"
           }
         }
-      }
+      },
+      "required": [
+        "nome",
+        "sinopse",
+        "data_lancamento",
+        "duracao"
+      ]
     },
     "Ator": {
       "type": "object",
       "properties": {
         "id": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "integer"
-            },
-            "example": {
-              "type": "number",
-              "example": 1
-            }
-          }
+          "type": "integer",
+          "example": 1,
+          "readOnly": true
         },
         "nome": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "Tom Holland"
-            }
-          }
+          "type": "string",
+          "example": "Tom Holland"
         },
         "data_nascimento": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "format": {
-              "type": "string",
-              "example": "date"
-            },
-            "example": {
-              "type": "string",
-              "example": "1996-06-01"
-            }
-          }
+          "type": "string",
+          "format": "date",
+          "example": "1996-06-01"
         },
         "biografia": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "Ator britânico conhecido por seu papel como Homem-Aranha."
-            }
-          }
+          "type": "string",
+          "example": "Ator britânico conhecido por seu papel como Homem-Aranha."
         },
         "id_sexo": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "integer"
-            },
-            "example": {
-              "type": "number",
-              "example": 1
-            }
-          }
+          "type": "integer",
+          "example": 1
+        },
+        "foto": {
+          "type": "string",
+          "example": "http://example.com/foto_ator.jpg"
         }
-      }
+      },
+      "required": [
+        "nome",
+        "data_nascimento",
+        "id_sexo"
+      ]
     },
     "Personagem": {
       "type": "object",
       "properties": {
         "id_personagem": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "integer"
-            },
-            "example": {
-              "type": "number",
-              "example": 1
-            }
-          }
+          "type": "integer",
+          "example": 1,
+          "readOnly": true
         },
         "nome_personagem": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "Peter Parker"
-            }
-          }
+          "type": "string",
+          "example": "Peter Parker"
         },
         "descricao": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "Um jovem com super-poderes de aranha."
-            }
-          }
+          "type": "string",
+          "example": "Um jovem com super-poderes de aranha."
         },
         "objetivo": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "Proteger a cidade de Nova York."
-            }
-          }
+          "type": "string",
+          "example": "Proteger a cidade de Nova York."
         },
         "id_ator": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "integer"
-            },
-            "example": {
-              "type": "number",
-              "example": 1
-            }
-          }
+          "type": "integer",
+          "example": 1
+        },
+        "id_filme": {
+          "type": "integer",
+          "example": 1
         }
       }
     },
@@ -1222,30 +1095,13 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "integer"
-            },
-            "example": {
-              "type": "number",
-              "example": 1
-            }
-          }
+          "type": "integer",
+          "example": 1,
+          "readOnly": true
         },
         "nome": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "Aventura"
-            }
-          }
+          "type": "string",
+          "example": "Aventura"
         }
       }
     },
@@ -1253,56 +1109,21 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "integer"
-            },
-            "example": {
-              "type": "number",
-              "example": 1
-            }
-          }
+          "type": "integer",
+          "example": 1,
+          "readOnly": true
         },
         "sigla": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "L"
-            }
-          }
+          "type": "string",
+          "example": "L"
         },
         "descricao": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "Livre para todos os públicos"
-            }
-          }
+          "type": "string",
+          "example": "Livre para todos os públicos"
         },
         "icone": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "http://example.com/livre.png"
-            }
-          }
+          "type": "string",
+          "example": "http://example.com/livre.png"
         }
       }
     },
@@ -1311,7 +1132,8 @@
       "properties": {
         "id": {
           "type": "integer",
-          "example": 1
+          "example": 1,
+          "readOnly": true
         },
         "nome": {
           "type": "string",
@@ -1329,6 +1151,10 @@
         "id_sexo": {
           "type": "integer",
           "example": 1
+        },
+        "foto": {
+          "type": "string",
+          "example": "http://example.com/foto_diretor.jpg"
         }
       },
       "required": [
@@ -1338,47 +1164,36 @@
         "id_sexo"
       ]
     },
+    "Idioma": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "nome": {
+          "type": "string",
+          "example": "Inglês"
+        }
+      },
+      "required": [
+        "nome"
+      ]
+    },
     "Error": {
       "type": "object",
       "properties": {
         "status": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "boolean"
-            },
-            "example": {
-              "type": "boolean",
-              "example": false
-            }
-          }
+          "type": "boolean",
+          "example": false
         },
         "status_code": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "integer"
-            },
-            "example": {
-              "type": "number",
-              "example": 404
-            }
-          }
+          "type": "integer",
+          "example": 404
         },
         "message": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "example": "string"
-            },
-            "example": {
-              "type": "string",
-              "example": "Não foram encontrados dados de retorno!"
-            }
-          }
+          "type": "string",
+          "example": "Não foram encontrados dados de retorno!"
         }
       }
     }

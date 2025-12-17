@@ -102,7 +102,7 @@ const getSelectLastID = async function (){
         let result = await prisma.$queryRawUnsafe(sql)
 
         if(Array.isArray(result))
-            return Number(result[0].id_personagem) // Mantido, pois está correto
+            return Number(result[0].id_personagem) 
         else
             return false
 
@@ -118,7 +118,7 @@ const getSelectLastID = async function (){
 const setInsertPersonagem = async function (personagem) {
 
     try {
-        // Usando o método seguro $executeRaw com template literals para evitar SQL Injection
+        
         let result = await prisma.$executeRaw`
         INSERT INTO tbl_personagem (
             nome_personagem,
@@ -172,7 +172,7 @@ const setUpdatePersonagem = async function (personagem) {
 const setDeletePersonagens = async function (id_personagem) {
 
     try {
-        // Usando o método seguro $executeRaw para DELETE
+        
         let result = await prisma.$executeRaw`DELETE FROM tbl_personagem WHERE id_personagem = ${id_personagem}`;
 
         if (result)

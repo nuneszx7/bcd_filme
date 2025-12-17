@@ -193,20 +193,20 @@ const excluirAtor = async function (id) {
 //Validação dos dados de cadastro e atualização do ator
 const validarDadosAtor = async function (ator) {
 
-    let atorJSON = JSON.parse(JSON.stringify(MESSAGES.ERROR_REQUIRED_FIELDS))
+    let erro = JSON.parse(JSON.stringify(MESSAGES.ERROR_REQUIRED_FIELDS))
 
     if (ator.nome == '' || ator.nome == undefined || ator.nome == null || ator.nome.length > 100) {
-        atorJSON.message += ' [Nome incorreto]'
-        return atorJSON //400
+        erro.message += ' [Nome incorreto]'
+        return erro //400
     } else if (ator.data_nascimento == undefined || ator.data_nascimento.length != 10) {
-        atorJSON.message += ' [Data de nascimento incorreta]'
-        return atorJSON //400
+        erro.message += ' [Data de nascimento incorreta]'
+        return erro //400
     } else if (ator.biografia == undefined) {
-        atorJSON.message += ' [Biografia incorreta]'
-        return atorJSON //400
+        erro.message += ' [Biografia incorreta]'
+        return erro //400
     } else if (ator.id_sexo == undefined || isNaN(ator.id_sexo) || ator.id_sexo <= 0) {
-        atorJSON.message += ' [ID do sexo incorreto]'
-        return atorJSON //400
+        erro.message += ' [ID do sexo incorreto]'
+        return erro //400
     } else {
         return false
     }
